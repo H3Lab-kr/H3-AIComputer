@@ -1,0 +1,149 @@
+.film-composition {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: #0c0f14;
+  color: #f2ecdf;
+  isolation: isolate;
+}
+.film-composition:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 70% 45%, #35445788, transparent 65%);
+  z-index: -1;
+}
+.film-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(#97aac307 1px, transparent 1px),
+    linear-gradient(90deg, #97aac307 1px, transparent 1px);
+  background-size: 6vw 6vw;
+  mask-image: linear-gradient(90deg, transparent, #000);
+}
+.film-orbit {
+  position: absolute;
+  left: 72%;
+  top: 49%;
+  width: 48vw;
+  height: 48vw;
+  border: 1px solid #d9c28620;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3vw #ddbb6b03,
+    0 0 0 8vw #ddbb6b02;
+}
+.film-top {
+  position: absolute;
+  left: 5vw;
+  right: 5vw;
+  top: 4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5;
+}
+.film-top > span {
+  font: 700 3vw var(--mono);
+  letter-spacing: -0.23vw;
+}
+.film-dot {
+  color: #d5b371;
+}
+.film-top small {
+  font: 500 0.65vw var(--mono);
+  letter-spacing: 0.22vw;
+  color: #cab98e;
+}
+.film-objects {
+  position: absolute;
+  left: 32%;
+  top: 0;
+  width: 73%;
+  height: 100%;
+}
+.film-words {
+  position: absolute;
+  left: 5vw;
+  top: 32%;
+  width: 58%;
+  pointer-events: none;
+}
+.film-words > p {
+  font: 500 0.72vw var(--mono);
+  letter-spacing: 0.18vw;
+  color: #d2b371;
+  margin-bottom: 2.2vw;
+}
+.film-words h1 {
+  white-space: pre-line;
+  font-size: 4.4vw;
+  font-weight: 500;
+  letter-spacing: -0.22vw;
+  line-height: 1.37;
+  margin: 0;
+}
+.film-words h2 {
+  font-size: 1.04vw;
+  font-weight: 400;
+  letter-spacing: -0.015vw;
+  color: #a9b5c4;
+  line-height: 1.8;
+  margin-top: 2.3vw;
+}
+.film-words strong {
+  display: block;
+  font: 400 1.4vw var(--mono);
+  letter-spacing: 0.15vw;
+  color: #e3c88e;
+  margin-top: 2.2vw;
+}
+.film-bottom {
+  position: absolute;
+  left: 5vw;
+  right: 5vw;
+  bottom: 3.2vw;
+  border-top: 1px solid #71849d44;
+  padding-top: 1.3vw;
+  display: flex;
+  justify-content: space-between;
+  gap: 2vw;
+  color: #95a3b5;
+  font: 0.55vw var(--mono);
+  letter-spacing: 0.12vw;
+}
+.film-bottom > span:nth-child(2) {
+  font-family: 'Paperozi', sans-serif;
+  letter-spacing: 0;
+  font-size: 0.55vw;
+}
+.film-bottom b {
+  color: #d7c08b;
+  font-weight: 400;
+}
+.film-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: #cdb071;
+  height: 3px;
+}
+.film-scene-0 .film-objects,
+.film-scene-6 .film-objects {
+  left: 42%;
+  width: 57%;
+}
+.film-scene-6 .film-words h1 {
+  font: 700 10vw var(--mono);
+  line-height: 1;
+  letter-spacing: -0.8vw;
+}
+.film-scene-5 .film-objects {
+  left: 35%;
+  width: 68%;
+}
+.film-scene-5 .film-words h1 {
+  font-size: 4vw;
+}

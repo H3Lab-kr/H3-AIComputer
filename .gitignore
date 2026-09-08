@@ -1,57 +1,44 @@
-# ==============================================================================
-# 보안 및 개인 설정
-# ==============================================================================
+# Secrets, including nested/local variants. The blank template is public.
 .env
 .env.*
 !.env.example
-
-# ==============================================================================
-# 프로젝트 사유/데이터 및 무거운 디렉터리 (오픈소스 제외)
-# ==============================================================================
-docs/
-web/
-stories/
-runs/
-models/
-prompts/
-engines/h3.c/
-engines/mlx-serve/
-
-
-# ==============================================================================
-# 로컬 바이너리 및 가상환경
-# ==============================================================================
-bin/
-.venv/
-env/
-venv/
-
-# ==============================================================================
-# 빌드 산출물, 캐시, 락, 로그
-# ==============================================================================
-cache/
-.cache/
-out/
-*.mp4
-!assets/samples/*.mp4
-*.ppm
-*.wav
-*.log
-manifest.tsv
-.h3.lock.d/
+*.pem
+*.key
+# Local environments and generated files
 __pycache__/
 *.py[cod]
-*.f32bak
-*.bak
-lib/opt/bench/flash_bench
-lib/opt/bench/sdpa_bench
-lib/opt/bench/quant_bench
-
-# ==============================================================================
-# OS 아티팩트
-# ==============================================================================
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
+.venv/
+.venv-*/
+.cache/
+.pytest_cache/
+/output/
+/dist/
+# Preserve local assets and client work; expose reusable tools separately.
+/vendor/
+/models/
+/bin/
+/legacy/
+/_preserved/
+/results/
+/productions/
+/samples/
+/demos/
+/audit/
+/sources/
+/evaluation/
+# Existing research/client documents stay local. Curated public guides below.
+/docs/*
+!/docs/public/
+# Local instructions/notes have client paths; public export has its own guide.
+/AGENTS.md
+# Swift build products
+.build/
+.swiftpm/
+
+# Web toolchain and test artifacts
+node_modules/
+apps/web/dist/
+playwright-report/
+test-results/
+*.tsbuildinfo

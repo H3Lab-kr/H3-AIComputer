@@ -1,0 +1,12 @@
+{
+  "apps/web/public/media/h3-brand-film-ko.mp4": {
+    "sha256": "5856d39170cd8ec18d41ba5f13f5040c6af73bfcde470e6e5bcab0e0fcd1203d",
+    "max_bytes": 20000000,
+    "provenance": "H3 original procedural 3D film, original synthesized score and Gemini Charon ko narration; no customer assets."
+  },
+  "apps/web/public/media/h3-brand-film-en.mp4": {
+    "sha256": "e43966d40e315907fb58d825f82de6af298a7e44674c48ffa256dfc829efb13e",
+    "max_bytes": 20000000,
+    "provenance": "H3 original procedural 3D film, original synthesized score and Gemini Charon en narration; no customer assets."
+  }
+}

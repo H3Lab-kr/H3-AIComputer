@@ -1,0 +1,9 @@
+{
+  "title": "H3Lab portable edit example",
+  "size": [1280, 720],
+  "fps": 24,
+  "shots": [
+    {"seconds": 5, "title": "Start with the story", "subtitle": "Define the audience and intent", "background": "#163344"},
+    {"seconds": 5, "title": "Review what matters", "subtitle": "Pictures, speech, timing and evidence", "background": "#254f49"}
+  ]
+}
