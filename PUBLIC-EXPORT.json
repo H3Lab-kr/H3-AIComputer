@@ -36,7 +36,7 @@
     "apps/macos/Tests/AIComputerTests/AgentTests.swift": "88a6a5e6b3290a56728498fbcf00f9cf84213cff8eae5adbd24888faccb2c192",
     "apps/macos/Tests/AIComputerTests/ClientTests.swift": "3d0999bec2587597c9b4cf5604a27ab79958252207e3fbf19d707cdb637bb8b2",
     "apps/macos/Tests/AIComputerTests/LocalizationTests.swift": "443687422956a39483a8344704f0389449ad97da0fe03ab9b9d66f9608723190",
-    "apps/macos/Tests/AIComputerTests/LocalizationUITests.swift": "983c98e0fd7434f1949148e3ab2f8026bfe86915dad1b8e5775c3b48c9220403",
+    "apps/macos/Tests/AIComputerTests/LocalizationUITests.swift": "3885943514f8ef21173f376c7eeeea4b99e6c51272eacf68c9dbc52086e8fd66",
     "apps/macos/Tests/AIComputerTests/MediaRunnerTests.swift": "cd649e15f45ef477838fb1115ab5631caa09200d03a66637d41d2360701c9535",
     "apps/macos/Tests/AIComputerTests/MediaTests.swift": "691d8d7f08bb42ac61bad12b996082cdc6f701a59a23a58f05b748059134772a",
     "apps/macos/Tests/AIComputerTests/PlayerUITests.swift": "05473f4046d00215d9853ce9b34f250284ffdbdc31349c0c46041d37be76299a",
