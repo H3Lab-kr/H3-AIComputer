@@ -1,6 +1,10 @@
-# H3 for Mac — Developer Preview 0.4.1
+# H3 for Mac — Developer Preview 0.5.0
 
 Native SwiftUI workspace for chat, Korean speech, image and video generation. Apple Silicon, macOS 14+. Build tested on the development Mac; this is not a certification of every Mac configuration.
+
+## Preview 0.5.0
+
+Selected-application computer control: observe, focus, press and replace text after explicit review. [Setup and validation](MAC-050-RELEASE.md).
 
 ## Preview 0.4.1
 
@@ -9,7 +13,7 @@ Native SwiftUI workspace for chat, Korean speech, image and video generation. Ap
 - First-run checklist, automatic readiness checks for an app-owned server, live generation elapsed time, retry from recorded inputs, interrupted-job recovery.
 - Blue/navy workspace, gold H3 identity and a native app icon.
 
-[Download the Apple Silicon Preview ZIP](../../apps/web/public/downloads/H3-Mac-0.4.1-preview.zip). Unzip and move H3.app to Applications. This build has local ad-hoc signing; **Developer ID signing/notarization is not yet available**, so macOS may block first launch. The source build below remains available. Do not disable Gatekeeper globally. The archive contains the app only; models and runtimes are installed separately.
+[Download the Apple Silicon Preview ZIP](../../apps/web/public/downloads/H3-Mac-0.5.0-preview.zip). Unzip and move H3.app to Applications. This build has local ad-hoc signing; **Developer ID signing/notarization is not yet available**, so macOS may block first launch. The source build below remains available. Do not disable Gatekeeper globally. The archive contains the app only; models and runtimes are installed separately.
 
 ## Build and first use
 

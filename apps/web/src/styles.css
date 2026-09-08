@@ -3091,12 +3091,23 @@ html[lang='en'] .section-heading h2 {
   gap: 44px;
   align-items: center;
 }
-.desktop-showcase > img {
+.desktop-showcase > img,
+.desktop-shot img {
   width: 100%;
   height: auto;
   border-radius: 16px;
   border: 1px solid #5579a340;
   box-shadow: 0 25px 70px #06112530;
+}
+.desktop-shot {
+  margin: 0;
+  min-width: 0;
+}
+.desktop-shot figcaption {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #556170;
 }
 .desktop-showcase h3 {
   font-size: 32px;

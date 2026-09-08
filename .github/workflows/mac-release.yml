@@ -16,8 +16,8 @@ jobs:
       - name: Verify downloadable app archive
         working-directory: apps/web/public/downloads
         run: |
-          shasum -a 256 -c H3-Mac-0.4.1-preview.zip.sha256
-          unzip -t H3-Mac-0.4.1-preview.zip
+          shasum -a 256 -c H3-Mac-0.5.0-preview.zip.sha256
+          unzip -t H3-Mac-0.5.0-preview.zip
   publish:
     needs: verify
     runs-on: ubuntu-latest
@@ -28,8 +28,8 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           prerelease: true
-          name: H3 Mac 0.4.1 · Speech preview fix & Korean / English
-          body_path: docs/public/MAC-041-RELEASE.md
+          name: H3 Mac 0.5.0 · Selected-app computer control
+          body_path: docs/public/MAC-050-RELEASE.md
           files: |
-            apps/web/public/downloads/H3-Mac-0.4.1-preview.zip
-            apps/web/public/downloads/H3-Mac-0.4.1-preview.zip.sha256
+            apps/web/public/downloads/H3-Mac-0.5.0-preview.zip
+            apps/web/public/downloads/H3-Mac-0.5.0-preview.zip.sha256

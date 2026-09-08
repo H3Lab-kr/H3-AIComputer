@@ -16,9 +16,10 @@ class Handler(BaseHTTPRequestHandler):
         self.reply({'data':[{'id':'fixture-model'}]})
     def do_POST(self):
         body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
-        if self.path == '/v1/chat/completions' and body.get('model') == 'agent-fixture':
+        if self.path == '/v1/chat/completions' and body.get('model') in ['agent-fixture', 'computer-fixture']:
             final=body['messages'][-1]['content'].startswith('H3 tool result')
             action={'action':'final' if final else 'write_text','path':'agent-result.md','content':'승인 필요','kind':'','prompt':'','message':'거절을 반영했습니다' if final else '새 문서를 만듭니다'}
+            if body.get('model') == 'computer-fixture' and not final: action.update(action='computer_observe', path='', content='')
             self.reply({'choices':[{'message':{'content':json.dumps(action,ensure_ascii=False)}}]});return
         if self.path!='/v1/chat/completions' or body['messages'][-1]['content']!='테스트':self.send_error(400);return
         if body.get('stream'):
@@ -46,7 +47,7 @@ try:
         subprocess.run(['swiftc','-parse-as-library',str(root/'Sources/AIComputer/Localization.swift'),str(root/'Sources/AIComputer/Client.swift'),str(root/'Tests/AIComputerTests/ClientTests.swift'),'-o',binary],check=True)
         result=subprocess.run([binary],env=env,check=True)
         agent_binary=str(Path(tmp)/'agent-tests')
-        sources=['Localization.swift','MediaPlayer.swift','Client.swift','MediaJob.swift','MediaView.swift','Agent.swift','ModelLibrary.swift','CloudMedia.swift']
+        sources=['Localization.swift','MediaPlayer.swift','Client.swift','MediaJob.swift','MediaView.swift','Agent.swift','ComputerControl.swift','ModelLibrary.swift','CloudMedia.swift']
         subprocess.run(['swiftc','-parse-as-library',*[str(root/'Sources/AIComputer'/name) for name in sources],str(root/'Tests/AIComputerTests/AgentTests.swift'),'-o',agent_binary],check=True)
         result=subprocess.run([agent_binary],env=env)
 finally:server.shutdown();server.server_close()

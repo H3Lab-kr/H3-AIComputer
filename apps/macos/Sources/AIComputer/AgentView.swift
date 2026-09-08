@@ -35,6 +35,25 @@ struct AgentView: View {
                         }
                     }.padding(12).disabled(agent.busy)
                 }
+                GroupBox(L("컴퓨터 제어 · Mac 프리뷰")) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle(L("선택한 앱 제어 허용"), isOn: $agent.computerEnabled)
+                        if agent.computerEnabled {
+                            Picker(L("대상 앱"), selection: $agent.computerTarget) {
+                                Text(L("앱을 선택하세요")).tag(Int32(0))
+                                ForEach(agent.computerApps, id: \.processIdentifier) { app in
+                                    Text(app.localizedName ?? String(app.processIdentifier)).tag(app.processIdentifier)
+                                }
+                            }
+                            HStack {
+                                Button(L("앱 새로고침")) { agent.refreshComputerApps() }
+                                Button(L("손쉬운 사용 설정")) { NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility")!) }
+                            }
+                            Button(L("앱 관찰 요청 넣기")) { agent.prompt = L("선택한 앱의 화면 요소를 관찰하고 할 수 있는 작업을 설명해주세요. 내용을 변경하지 마세요.") }
+                            Text(L("화면 읽기·버튼 누르기·텍스트 입력을 매번 확인합니다. 읽은 내용은 선택한 브레인과 작업 기록에 포함됩니다. 민감한 창을 닫고 사용하세요. 중단 시 이미 실행된 작업은 되돌아가지 않습니다.")).font(.caption).foregroundStyle(.secondary)
+                        }
+                    }.padding(12).disabled(agent.busy)
+                }.onAppear { agent.refreshComputerApps() }
                 HStack {
                     Label(agent.folder.isEmpty ? L("이 작업에 사용할 폴더") : agent.folder, systemImage: "folder").lineLimit(2).textSelection(.enabled)
                     Spacer(); Button(L("폴더 선택")) { choose(true) { agent.folder = $0 } }.disabled(agent.busy)
@@ -51,8 +70,8 @@ struct AgentView: View {
                     GroupBox(L("실행 전 확인")) {
                         VStack(alignment: .leading, spacing: 12) {
                             Text(request.message).font(.headline)
-                            Text(request.action == "write_text" ? L("새 문서: {0}", String(describing: request.path)) : L("{0} 생성 작업 준비", String(describing: request.kind))).font(.callout.bold())
-                            ScrollView { Text(request.action == "write_text" ? request.content : request.prompt).textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading) }.frame(maxHeight: 220)
+                            Text(request.action.hasPrefix("computer_") ? L("컴퓨터 작업") : request.action == "write_text" ? L("새 문서: {0}", String(describing: request.path)) : L("{0} 생성 작업 준비", String(describing: request.kind))).font(.callout.bold())
+                            ScrollView { Text(request.action.hasPrefix("computer_") ? agent.computerPreview : request.action == "write_text" ? request.content : request.prompt).textSelection(.enabled).frame(maxWidth: .infinity, alignment: .leading) }.frame(maxHeight: 220)
                             HStack { Button(L("승인")) { agent.approve(true) }.buttonStyle(.borderedProminent); Button(L("거절")) { agent.approve(false) } }
                             if request.action == "prepare_media" { Text(L("승인하면 작업을 준비합니다. 실제 생성은 해당 생성 화면에서 설정을 확인한 뒤 시작합니다.")).font(.caption) }
                         }.padding(12)

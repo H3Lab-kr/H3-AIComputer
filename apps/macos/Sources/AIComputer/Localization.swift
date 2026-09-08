@@ -8,6 +8,27 @@ enum AppLanguage {
         return Locale.preferredLanguages.first?.hasPrefix("ko") == true ? "ko" : "en"
     }
     static let english: [String: String] = [
+        "앱 관찰 요청 넣기": "Try observing the app",
+        "선택한 앱의 화면 요소를 관찰하고 할 수 있는 작업을 설명해주세요. 내용을 변경하지 마세요.": "Observe the selected application and explain the actions available. Do not change anything.",
+        "시스템 설정에서 H3의 손쉬운 사용 권한을 허용하세요.": "Allow H3 in System Settings → Privacy & Security → Accessibility.",
+        "컴퓨터 제어를 켜고 실행 중인 대상 앱을 선택하세요.": "Enable computer control and choose a running application.",
+        "화면 정보가 만료되거나 변경되었습니다. 다시 관찰하세요.": "The observation expired or changed. Observe the app again.",
+        "이 화면 요소는 해당 작업을 지원하지 않습니다.": "This interface element does not support the requested action.",
+        "선택한 앱의 화면 요소와 텍스트를 읽어 브레인에 전달합니다.": "Read the selected app’s interface and text and share it with the selected brain.",
+        "선택한 앱을 앞으로 가져옵니다.": "Bring the selected application to the front.",
+        "버튼 누르기": "Press button",
+        "앱에 작업 요청을 전달했습니다. 다시 관찰하여 결과를 확인하세요.": "Action delivered to the app. Observe again to verify the outcome.",
+        "컴퓨터 제어 · Mac 프리뷰": "Computer control · Mac preview",
+        "선택한 앱 제어 허용": "Allow control of a selected app",
+        "대상 앱": "Target application",
+        "앱을 선택하세요": "Choose an application",
+        "앱 새로고침": "Refresh applications",
+        "손쉬운 사용 설정": "Accessibility settings",
+        "화면 읽기·버튼 누르기·텍스트 입력을 매번 확인합니다. 읽은 내용은 선택한 브레인과 작업 기록에 포함됩니다. 민감한 창을 닫고 사용하세요. 중단 시 이미 실행된 작업은 되돌아가지 않습니다.": "Review each observation, button press and text entry. Read content is included in the selected brain’s context and local task records. Close sensitive windows first. Stopping does not undo completed actions.",
+        "컴퓨터 작업": "Computer action",
+        "컴퓨터 작업 승인": "Computer action approved",
+        "컴퓨터 작업 거절": "Computer action denied",
+
         "인증 정보·쿼리가 없는 HTTPS API 기본 주소를 입력하세요.": "Enter an HTTPS API base URL without credentials or a query.",
         "Keychain에서 API 키를 읽거나 저장하지 못했습니다. 키를 다시 저장하세요.": "Unable to read or save the API key in Keychain. Save the key again.",
         "API 응답이 지원 형식과 다릅니다. 제공자의 모델·출력 형식을 확인하세요.": "Unsupported API response. Check the provider's model and output format.",

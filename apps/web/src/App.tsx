@@ -711,7 +711,7 @@ export default function App() {
               />
               <div className="mac-panel">
                 <div>
-                  <p className="eyebrow">H3 FOR MAC / PREVIEW 0.4.1</p>
+                  <p className="eyebrow">H3 FOR MAC / PREVIEW 0.5.0</p>
                   <h3>
                     {t('이미 가진 Mac에도,')}
                     <br />
@@ -719,11 +719,11 @@ export default function App() {
                   </h3>
                   <p>
                     {t(
-                      'H3 Preview 0.4.1은 한국어·영어 전환과 안정적인 음성 미리보기를 제공합니다. 스트리밍 대화, 모델 연결, 음성·이미지·영상 작업을 내 Mac에서 이어가세요.',
+                      'H3 Preview 0.5.0에서 AI에게 선택한 Mac 앱의 화면 읽기, 버튼 누르기, 텍스트 입력을 맡기세요. 로컬 브레인을 기본으로, 실행 전 확인과 한국어·영어 화면을 제공합니다.',
                     )}
                   </p>
-                  <a className="button primary" href="/downloads/H3-Mac-0.4.1-preview.zip" download>
-                    {t('Mac Preview 0.4.1 다운로드')} <ArrowUpRight size={16} />
+                  <a className="button primary" href="/downloads/H3-Mac-0.5.0-preview.zip" download>
+                    {t('Mac Preview 0.5.0 다운로드')} <ArrowUpRight size={16} />
                   </a>
                   <p className="mac-preview-note">
                     {t('Apple Silicon · macOS 14+ · 모델 별도 준비 · 개발자 Preview (공증 전)')}
@@ -745,7 +745,9 @@ export default function App() {
                 <div className="mac-visual">
                   <img
                     className="mac-app-screenshot"
-                    src={language === 'en' ? '/brand/h3-mac-041-en.png' : '/brand/h3-mac-041-ko.png'}
+                    src={
+                      language === 'en' ? '/brand/h3-mac-041-en.png' : '/brand/h3-mac-041-ko.png'
+                    }
                     alt={t('H3 Mac 앱 실제 화면 · 시작 준비와 생성 워크스페이스')}
                     loading="lazy"
                     width="1860"

@@ -31,7 +31,15 @@ Full HD · AI-generated narration · Original music · Localized captions
 | **Video** | Generate video with audio through MiniMax H3, supply a starting image and use the default eight-step workflow |
 | **Library** | Keep inputs, settings, original outputs and logs together; revisit recent work |
 
-**The Mac app is currently developer Preview 0.4.1.** Its native SwiftUI interface brings chat, voice, image and video tools together with model connections and job records.
+**The Mac app is currently developer Preview 0.5.0.** Its native SwiftUI interface brings chat, voice, image and video tools together with model connections and job records.
+
+### Mac Preview 0.5.0 · AI that acts on your computer
+
+Choose an application in the AI agent to **read its interface, bring it forward, press buttons and replace text**. Use your local brain by default, or optional Codex and Claude with the same H3 approval flow. Available in Korean and English.
+
+Review the target and action before execution; stop blocks subsequent actions. Requires Mac Accessibility permission and compatible app elements. Windows/Linux desktop control is a later milestone.
+
+[Research across 14 AI apps and tools, and the product strategy](docs/public/AI-COMPUTER-STRATEGY-20260909.md) · [Computer control guide and validation scope](docs/public/MAC-050-RELEASE.md)
 
 ### New in Mac Preview 0.4.1
 
@@ -41,7 +49,7 @@ Switch **한국어 / English** from the app header without restarting. Preview 0
 
 ![H3 Mac Preview 0.4.1](apps/web/public/brand/h3-mac-041-en.png)
 
-[Download the Mac Preview](apps/web/public/downloads/H3-Mac-0.4.1-preview.zip) · [Setup and release notes](docs/public/MAC-APP.md) · [Product roadmap](docs/public/MAC-PRODUCT-PLAN.md)
+[Download the Mac Preview](apps/web/public/downloads/H3-Mac-0.5.0-preview.zip) · [Setup and release notes](docs/public/MAC-APP.md) · [Product roadmap](docs/public/MAC-PRODUCT-PLAN.md)
 
 ## AI computers designed around the work
 

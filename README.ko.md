@@ -21,6 +21,14 @@ H3Lab은 공개 모델과 글로벌 기술팀의 실행 기술을 바탕으로, 
 
 Full HD · AI 합성 나레이션 · 오리지널 음악 · 언어별 자막
 
+### Mac Preview 0.5.0 · 컴퓨터를 움직이는 AI
+
+AI 에이전트에서 대상 앱을 선택하면 **화면 요소 읽기, 앱 활성화, 버튼 누르기, 텍스트 입력**을 요청할 수 있습니다. 로컬 AI가 기본이며, 선택형 Codex·Claude에도 같은 실행·승인 흐름을 적용합니다. 한국어와 영어 UI를 지원합니다.
+
+실행할 앱과 내용을 확인하고 승인하세요. 중단하면 다음 동작을 차단합니다. Mac 손쉬운 사용 권한과 접근성 요소를 제공하는 앱이 필요하며, Windows/Linux 데스크톱 제어는 후속 단계입니다.
+
+[14개 주요 AI 앱·도구 조사와 제품 전략](docs/public/AI-COMPUTER-STRATEGY-20260909.md) · [컴퓨터 제어 사용법과 검증 범위](docs/public/MAC-050-RELEASE.md)
+
 ### Mac Preview 0.4.1의 새로운 경험
 
 스트리밍 응답, 대화·생성 초안 자동 저장, 로컬 서버 찾기, 첫 실행 안내와 같은 설정으로 새 작업 만들기를 제공합니다. 네이비·블루 화면과 골드 H3 아이콘으로 브랜드 경험을 연결합니다.
@@ -29,7 +37,7 @@ Full HD · AI 합성 나레이션 · 오리지널 음악 · 언어별 자막
 
 ![H3 Mac Preview 0.4.1 실제 화면](apps/web/public/brand/h3-mac-041-ko.png)
 
-[Mac Preview 다운로드](apps/web/public/downloads/H3-Mac-0.4.1-preview.zip) · [설치 및 변경 안내](docs/public/MAC-APP.md) · [제품화 로드맵](docs/public/MAC-PRODUCT-PLAN.md)
+[Mac Preview 다운로드](apps/web/public/downloads/H3-Mac-0.5.0-preview.zip) · [설치 및 변경 안내](docs/public/MAC-APP.md) · [제품화 로드맵](docs/public/MAC-PRODUCT-PLAN.md)
 
 ## 하나의 컴퓨터, 다양한 가능성
 
@@ -41,7 +49,7 @@ Full HD · AI 합성 나레이션 · 오리지널 음악 · 언어별 자막
 | **영상** | MiniMax H3 기반 영상·오디오 생성, 시작 이미지 입력, 8스텝 기본 제작 흐름 |
 | **작업 보관함** | 입력·설정·원본·로그를 한 작업으로 보관하고 최신순으로 다시 확인 |
 
-**현재 Mac 앱은 개발자 Preview 0.4.1입니다.** SwiftUI 기반 네이티브 화면에서 대화·음성·이미지·영상 도구를 다루고, 모델 연결과 작업 기록을 함께 관리합니다.
+**현재 Mac 앱은 개발자 Preview 0.5.0입니다.** SwiftUI 기반 네이티브 화면에서 대화·음성·이미지·영상 도구를 다루고, 모델 연결과 작업 기록을 함께 관리합니다.
 
 ## 목적에 맞는 AI 컴퓨터
 

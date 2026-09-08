@@ -1,6 +1,38 @@
 import Foundation
+import AppKit
+@MainActor final class BrokerComputerFixture: ComputerBackend {
+    var available = true
+    var reads = 0
+    func invalidate() {}
+    func observe() throws -> [ComputerElement] { reads += 1; return [] }
+    func perform(_ action: String, id: String, text: String) throws { fatalError("Unexpected mutation") }
+}
 @main struct AgentTests {
+    @MainActor static func verifyComputerBroker(endpoint: String, root: URL) async throws {
+        for decision in ["deny", "approve", "stop"] {
+            let backend = BrokerComputerFixture()
+            let agent = AgentWorkspace()
+            agent.endpoint = endpoint; agent.model = "computer-fixture"; agent.folder = root.path; agent.prompt = "Observe the test app"
+            agent.computerEnabled = true; agent.computerApps = [NSRunningApplication.current]
+            agent.computerTarget = NSRunningApplication.current.processIdentifier
+            agent.computerBackend = { _ in backend }
+            agent.run()
+            for _ in 0..<150 {
+                if agent.pending != nil { break }
+                try await Task.sleep(nanoseconds: 50_000_000)
+            }
+            precondition(agent.pending?.action == "computer_observe", agent.error)
+            precondition(backend.reads == 0, "Read before approval")
+            if decision == "stop" { agent.stop() } else { agent.approve(decision == "approve") }
+            for _ in 0..<150 { if !agent.busy { break }; try await Task.sleep(nanoseconds: 50_000_000) }
+            precondition(!agent.busy)
+            precondition(backend.reads == (decision == "approve" ? 1 : 0))
+            if let records = agent.recordDirectory { try? FileManager.default.removeItem(at: records) }
+        }
+        print("PASS: computer broker approves, denies and stops without unapproved observation")
+    }
     @MainActor static func main() async throws {
+        _ = NSApplication.shared
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
@@ -51,6 +83,8 @@ import Foundation
             precondition(!FileManager.default.fileExists(atPath: root.appendingPathComponent("agent-result.md").path))
             precondition(agent.output == "거절을 반영했습니다")
             if let records = agent.recordDirectory { try? FileManager.default.removeItem(at: records) }
+            try await verifyComputerBroker(endpoint: endpoint, root: root)
+
         }
         print("PASS: agent scope, symlinks, no-overwrite, schema, approval denial, model tags, progress and cloud request boundaries")
     }

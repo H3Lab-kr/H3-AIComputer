@@ -1,4 +1,4 @@
-import { t } from './i18n'
+import { t, language } from './i18n'
 const release = 'https://github.com/H3Lab-kr/H3-AIComputer/releases/download/v0.4.0-preview.1/'
 export default function DesktopDownloads() {
   return (
@@ -15,13 +15,27 @@ export default function DesktopDownloads() {
         <p>{t('설치된 모델이 기본입니다. 필요할 때 OpenRouter, Codex, Claude를 선택하세요.')}</p>
       </div>
       <div className="desktop-showcase">
-        <img
-          src="/brand/h3-desktop-preview-04.png"
-          alt={t('H3 데스크톱 앱 실제 화면')}
-          loading="lazy"
-          width="1920"
-          height="1302"
-        />
+        {/* 데스크톱 Preview 0.4 의 화면은 아직 한국어만 있다. 영어 화면을 지어내지 않고,
+            영어로 볼 때는 실제 인터페이스 언어를 그대로 밝힌다. */}
+        <figure className="desktop-shot">
+          <img
+            src="/brand/h3-desktop-preview-04.png"
+            alt={
+              language === 'en'
+                ? 'H3 desktop app, Preview 0.4, shown with its Korean interface'
+                : t('H3 데스크톱 앱 실제 화면')
+            }
+            loading="lazy"
+            width="1920"
+            height="1302"
+          />
+          {language === 'en' && (
+            <figcaption>
+              Actual Preview 0.4 screen. The desktop interface is currently Korean only; English is
+              in progress. The Mac app already switches between Korean and English.
+            </figcaption>
+          )}
+        </figure>
         <div>
           <p className="eyebrow">DESKTOP PREVIEW 0.4</p>
           <h3>{t('대화에서, 일을 맡기는 AI로.')}</h3>
@@ -40,7 +54,7 @@ export default function DesktopDownloads() {
             <a className="button primary" href={release + 'H3-macOS-arm64.tar.gz'}>
               macOS Apple Silicon
             </a>
-            <a className="button secondary" href="/downloads/H3-Mac-0.4.1-preview.zip">
+            <a className="button secondary" href="/downloads/H3-Mac-0.5.0-preview.zip">
               {t('Mac 네이티브 앱 · SwiftUI')}
             </a>
           </div>
