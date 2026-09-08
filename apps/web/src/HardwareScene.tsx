@@ -1,5 +1,5 @@
 import { t } from './i18n'
-import { Suspense, useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { RoundedBox, ContactShadows, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
@@ -235,16 +235,35 @@ function EngineeringDetails() {
     </group>
   )
 }
+/* 좁은 화면에서는 전개 폭을 줄이고 카메라를 뒤로 뺀다.
+   three 의 fov 는 세로 기준이라, 세로로 긴 화면에서는 가로 화각이 좁아져
+   가로로 퍼진 모델의 좌우가 잘린다. 화각이 아니라 거리로 해결한다. */
+export function useCompactScene() {
+  const query = '(max-width: 800px)'
+  const [compact, setCompact] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches,
+  )
+  useEffect(() => {
+    const m = window.matchMedia(query)
+    const change = () => setCompact(m.matches)
+    m.addEventListener('change', change)
+    return () => m.removeEventListener('change', change)
+  }, [])
+  return compact
+}
+
 export function Workstation({
   exploded,
   reduced,
   paused,
   explosion,
+  spread = 1,
 }: {
   exploded: boolean
   reduced: boolean
   paused: boolean
   explosion?: number
+  spread?: number
 }) {
   const roof = useRef<THREE.Group>(null),
     side = useRef<THREE.Group>(null),
@@ -252,7 +271,7 @@ export function Workstation({
     gpu = useRef<THREE.Group>(null),
     root = useRef<THREE.Group>(null)
   useFrame((state, dt) => {
-    const e = explosion ?? (exploded ? 1 : 0)
+    const e = (explosion ?? (exploded ? 1 : 0)) * spread
     const ease = reduced || paused ? 1 : 1 - Math.exp(-Math.min(dt, 0.1) * 5)
     if (roof.current)
       roof.current.position.y = THREE.MathUtils.lerp(roof.current.position.y, e * 1.2, ease)
@@ -402,10 +421,11 @@ export default function HardwareScene({
   paused: boolean
   active?: boolean
 }) {
+  const compact = useCompactScene()
   return (
     <Canvas
       aria-label={t('H3 컴퓨터 내부 설계 3D 컨셉')}
-      camera={{ position: [6.5, 3.5, 7.3], fov: 34 }}
+      camera={{ position: compact ? [7.3, 3.9, 8.2] : [6.5, 3.5, 7.3], fov: 34 }}
       dpr={[1, 1.5]}
       shadows
       frameloop={!active ? 'never' : reduced || paused ? 'demand' : 'always'}
@@ -423,7 +443,12 @@ export default function HardwareScene({
       <directionalLight position={[-4, 2, -3]} intensity={3} color="#f0f5ff" />
       <directionalLight position={[5, 1, -2]} intensity={2.5} color="#cad8eb" />
       <Suspense fallback={null}>
-        <Workstation exploded={exploded} reduced={reduced} paused={paused} />
+        <Workstation
+          exploded={exploded}
+          reduced={reduced}
+          paused={paused}
+          spread={compact ? 0.62 : 1}
+        />
         <ContactShadows
           position={[0, -1.96, 0]}
           opacity={0.42}
@@ -441,7 +466,7 @@ export default function HardwareScene({
         maxPolarAngle={Math.PI / 2.1}
         minAzimuthAngle={-0.1}
         maxAzimuthAngle={1.3}
-        target={[exploded ? 0.45 : 0, 0.12, 0]}
+        target={[exploded ? (compact ? 0.15 : 0.45) : 0, 0.12, 0]}
       />
     </Canvas>
   )

@@ -7,7 +7,12 @@ test('desktop customer journey and hardware controls', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toContainText('생각을 만들고')
   await expect(page.locator('.hero canvas')).toBeVisible({ timeout: 30000 })
+  // 히어로는 내부를 펼친 상태로 시작한다.
+  const reassemble = page.getByRole('button', { name: '다시 조립하기' })
+  await expect(reassemble).toHaveAttribute('aria-pressed', 'true')
+  await reassemble.click()
   const explode = page.getByRole('button', { name: '내부 펼쳐보기' })
+  await expect(explode).toHaveAttribute('aria-pressed', 'false')
   await explode.click()
   await expect(page.getByRole('button', { name: '다시 조립하기' })).toHaveAttribute(
     'aria-pressed',

@@ -12,6 +12,19 @@ import AVKit
     @Published var image: NSImage?
     private var process: Process?
     private var cancelled = false
+    @Published var startedAt: Date?
+    init() {
+        do { try MediaFiles.recoverInterrupted(); history = MediaFiles.history() }
+        catch { self.error = "이전 작업 확인 실패: " + error.localizedDescription }
+    }
+    func shutdown() {
+        guard let p = process, p.isRunning else { return }
+        cancelled = true; p.terminate()
+        if p.isRunning { kill(p.processIdentifier, SIGKILL) }
+        if var r = record, let d = directory { r.status = "interrupted"; try? r.save(in: d) }
+    }
+    func retry() { guard !busy, let r = record, r.input.executable != "cloud-api" else { return }; prepare(r.input) }
+
     func prepare(_ input: MediaInput) {
         guard !busy else { return }
         error = ""; player?.pause(); player = nil; image = nil
@@ -24,7 +37,7 @@ import AVKit
         Task {
             var handles: [FileHandle] = []
             defer { handles.forEach { try? $0.close() }; process = nil; busy = false; history = MediaFiles.history() }
-            let start = Date()
+            let start = Date(); startedAt = start
             do {
                 try r.input.validate()
                 let p = Process(); p.executableURL = URL(fileURLWithPath: r.input.executable); p.arguments = r.arguments
@@ -64,15 +77,31 @@ import AVKit
     func select(_ r: MediaRecord, _ d: URL) { guard !busy else { return }; record = r; directory = d; preview(r, d) }
 }
 @MainActor final class MediaDraft: ObservableObject {
-    @Published var prompt = ""
-    @Published var reference = ""
-    @Published var voice = "Sohee"
-    @Published var width: Int
-    @Published var height: Int
-    @Published var frames = 107
-    @Published var steps: Int
-    @Published var seed = 1
-    init(kind: MediaKind) { width = kind == .image ? 1024 : 384; height = kind == .image ? 1024 : 384; steps = kind == .video ? 8 : 4 }
+    private let key: String
+    private let defaults: UserDefaults
+    @Published var prompt = "" { didSet { save() } }
+    @Published var reference = "" { didSet { save() } }
+    @Published var voice = "Sohee" { didSet { save() } }
+    @Published var width: Int { didSet { save() } }
+    @Published var height: Int { didSet { save() } }
+    @Published var frames = 107 { didSet { save() } }
+    @Published var steps: Int { didSet { save() } }
+    @Published var seed = 1 { didSet { save() } }
+    init(kind: MediaKind, defaults: UserDefaults = .standard) {
+        self.defaults = defaults; key = "draft.\(kind.rawValue)"
+        let saved = defaults.dictionary(forKey: key) ?? [:]
+        width = saved["width"] as? Int ?? (kind == .image ? 1024 : 384)
+        height = saved["height"] as? Int ?? (kind == .image ? 1024 : 384)
+        steps = saved["steps"] as? Int ?? (kind == .video ? 8 : 4)
+        prompt = saved["prompt"] as? String ?? ""
+        reference = saved["reference"] as? String ?? ""
+        voice = saved["voice"] as? String ?? "Sohee"
+        frames = saved["frames"] as? Int ?? 107
+        seed = saved["seed"] as? Int ?? 1
+    }
+    private func save() {
+        defaults.set(["prompt": prompt, "reference": reference, "voice": voice, "width": width, "height": height, "frames": frames, "steps": steps, "seed": seed], forKey: key)
+    }
 }
 struct MediaView: View {
     @ObservedObject var vm: MediaWorkspace
@@ -85,7 +114,7 @@ struct MediaView: View {
     @AppStorage("media.image.model") var imageModel = ""
     @AppStorage("media.video.model") var videoModel = ""
     @State private var showConnection = false
-    private let accent = Color(red: 0.13, green: 0.58, blue: 0.43)
+    private let accent = Color(red: 0.18, green: 0.43, blue: 0.88)
     var executable: Binding<String> { switch kind { case .speech: return $speechExecutable; case .image: return $imageExecutable; case .video: return $videoExecutable } }
     var model: Binding<String> { switch kind { case .speech: return $speechModel; case .image: return $imageModel; case .video: return $videoModel } }
     var pathsSet: Bool { !executable.wrappedValue.isEmpty && !model.wrappedValue.isEmpty }
@@ -159,7 +188,12 @@ struct MediaView: View {
                     }
                 }.padding(22).background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 18)).disabled(vm.busy)
                 if vm.busy {
-                    HStack { ProgressView().controlSize(.small); Text("생성 중입니다. 다른 화면으로 이동해도 작업은 계속됩니다.").font(.callout); Spacer(); Button("중단") { vm.stop() } }.padding(16).background(accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                    HStack { ProgressView().controlSize(.small); VStack(alignment: .leading) {
+                    Text("생성 중 · 다른 화면으로 이동해도 계속됩니다.").font(.callout)
+                    if let start = vm.startedAt { TimelineView(.periodic(from: start, by: 1)) { context in
+                        Text("경과 \(Int(context.date.timeIntervalSince(start)))초 · 모델 준비 포함").font(.caption.monospacedDigit()).foregroundStyle(.secondary)
+                    } }
+                }; Spacer(); Button("중단") { vm.stop() } }.padding(16).background(accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
                 }
                 if !vm.error.isEmpty { Label(vm.error, systemImage: "exclamationmark.circle").foregroundStyle(.red).textSelection(.enabled) }
                 if let r = vm.record, r.input.kind == kind, let d = vm.directory {
@@ -173,6 +207,7 @@ struct MediaView: View {
                         if let image = vm.image { Image(nsImage: image).resizable().scaledToFit().frame(maxHeight: 420).clipShape(RoundedRectangle(cornerRadius: 12)) }
                         if let player = vm.player { VideoPlayer(player: player).frame(height: kind == .speech ? 90 : 360).clipShape(RoundedRectangle(cornerRadius: 12)) }
                         HStack {
+                            Button("같은 설정으로 새 작업", systemImage: "arrow.clockwise") { vm.retry() }.disabled(vm.busy || r.input.executable == "cloud-api")
                             Button("Finder에서 보기", systemImage: "folder") { NSWorkspace.shared.open(d) }
                             if let name = r.artifacts.first, r.status == "generated_unreviewed" { Button("원본 열기", systemImage: "arrow.up.right.square") { NSWorkspace.shared.open(d.appendingPathComponent(name)) } }
                             Spacer(); if let seconds = r.elapsedSeconds { Text(String(format: "전체 실행 %.2f초", seconds)).font(.caption.monospacedDigit()).foregroundStyle(.secondary) }

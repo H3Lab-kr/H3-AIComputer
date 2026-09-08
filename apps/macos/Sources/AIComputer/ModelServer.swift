@@ -3,16 +3,17 @@ import Foundation
 
 @MainActor final class ModelServer: ObservableObject {
     @Published var running = false
+    @Published var ready = false
     @Published var error = ""
     @Published var logDirectory: URL?
     private var process: Process?
     let endpoint = "http://127.0.0.1:1235/v1"
     func start(executable: String, model: String) {
         guard !running else { return }
-        error = ""
+        error = ""; running = true
         Task {
             var output: FileHandle?
-            defer { try? output?.close(); running = false; process = nil }
+            defer { try? output?.close(); running = false; ready = false; process = nil }
             do {
                 // Reuse local executable/model validation; no repository ID downloads.
                 try MediaInput(kind: .speech, executable: executable, model: model, prompt: "server").validate()
@@ -25,10 +26,18 @@ import Foundation
                 p.environment = MediaFiles.environment(executable: executable)
                 p.standardOutput = output; p.standardError = output; p.standardInput = FileHandle.nullDevice
                 process = p; try p.run(); running = true
-                while p.isRunning { try await Task.sleep(nanoseconds: 200_000_000) }
+                while p.isRunning {
+                    if !ready, let models = try? await LocalClient(endpoint).models(timeout: 1), !models.isEmpty { ready = true }
+                    try await Task.sleep(nanoseconds: 500_000_000)
+                }
                 if p.terminationStatus != 0 && p.terminationReason == .exit { error = "서버가 종료되었습니다 (\(p.terminationStatus)). 로그를 확인하세요." }
             } catch { self.error = error.localizedDescription }
         }
+    }
+    func shutdown() {
+        guard let p = process, p.isRunning else { return }
+        p.terminate()
+        if p.isRunning { kill(p.processIdentifier, SIGKILL) }
     }
     func stop() {
         guard let p = process, p.isRunning else { return }

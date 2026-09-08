@@ -1,6 +1,14 @@
 import Foundation
 @main struct MediaRunnerTests {
     @MainActor static func main() async throws {
+        let suite = "H3DraftTests-" + UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let draft = MediaDraft(kind: .video, defaults: defaults)
+        precondition(draft.steps == 8)
+        draft.prompt = "복원할 장면"; draft.seed = 42
+        let restored = MediaDraft(kind: .video, defaults: defaults)
+        precondition(restored.prompt == "복원할 장면" && restored.seed == 42 && restored.steps == 8)
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }
@@ -32,6 +40,14 @@ import Foundation
         try script("exec /bin/sleep 30\n")
         try prepare(); vm.run(); try await Task.sleep(nanoseconds: 200_000_000); vm.stop(); try await finish()
         precondition(vm.record?.status == "cancelled")
+        try prepare()
+        var stale = vm.record!; stale.status = "running"; try stale.save(in: vm.directory!)
+        try MediaFiles.recoverInterrupted(root: root)
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        let recovered = try decoder.decode(MediaRecord.self, from: Data(contentsOf: vm.directory!.appendingPathComponent("request.json")))
+        precondition(recovered.status == "interrupted" && recovered.qualityApproved == false)
+        try MediaFiles.recoverInterrupted(root: root)
+        print("PASS: interrupted job recovery is idempotent and never approves output")
         print("PASS: runner success, literal prompt, process failure and cancellation")
     }
 }

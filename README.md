@@ -31,7 +31,15 @@ Full HD · AI-generated narration · Original music · Localized captions
 | **Video** | Generate video with audio through MiniMax H3, supply a starting image and use the default eight-step workflow |
 | **Library** | Keep inputs, settings, original outputs and logs together; revisit recent work |
 
-**The Mac app is currently developer Preview 0.3.** Its native SwiftUI interface brings chat, voice, image and video tools together with model connections and job records.
+**The Mac app is currently developer Preview 0.4.** Its native SwiftUI interface brings chat, voice, image and video tools together with model connections and job records.
+
+### New in Mac Preview 0.4
+
+Streaming answers, saved conversations and creation drafts, local server discovery, a setup checklist and repeatable generation jobs. The blue/navy interface and gold H3 icon connect the app to the product identity.
+
+![H3 Mac Preview 0.4](apps/web/public/brand/h3-mac-preview-04.png)
+
+[Download the Mac Preview](apps/web/public/downloads/H3-Mac-0.4.0-preview.zip) · [Setup and release notes](docs/public/MAC-APP.md) · [Product roadmap](docs/public/MAC-PRODUCT-PLAN.md)
 
 ## AI computers designed around the work
 
@@ -78,6 +86,14 @@ The bilingual brand website makes the products and the vision tangible.
 
 The interactive simulation explores **understand → plan → approve → act → review**. Real device connections will develop through hardware-specific validation.
 
+## Desktop downloads · Preview 0.4
+
+**Local models first. Optional cloud when you choose.** The shared desktop app provides local chat and agents, Ollama model management, OpenRouter APIs, optional Codex/Claude planners and creation records.
+
+[Windows · Linux · macOS downloads](https://github.com/H3Lab-kr/H3-AIComputer/releases/tag/v0.4.0-preview.1) · [Desktop setup](apps/desktop/README.md)
+
+![H3 Desktop](apps/web/public/brand/h3-desktop-preview-04.png)
+
 ## Start on Mac
 
 Prepare an Apple Silicon Mac, macOS 14 or later, and Apple's Command Line Tools.
@@ -111,6 +127,7 @@ H3 records inputs, execution settings and results together. Reusable generation,
 ```text
 apps/web/       Bilingual website · 3D products · Brand films
 apps/macos/     Native SwiftUI H3 Mac app
+apps/desktop/   Shared Mac / Windows / Linux desktop app
 assets/brand/   H3 brand assets
 scripts/        App build and test scripts
 examples/       Runnable production examples

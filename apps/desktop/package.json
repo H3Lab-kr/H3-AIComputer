@@ -1,0 +1,20 @@
+{
+  "name": "h3-ai-computer",
+  "productName": "H3 AI Computer",
+  "version": "0.4.0",
+  "description": "Local-first AI workspace for creation and agents",
+  "author": "H3Lab",
+  "license": "MIT",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "package": "node package.cjs",
+    "smoke": "node tests/smoke.cjs"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "44.3.0",
+    "playwright": "^1.63.0"
+  }
+}

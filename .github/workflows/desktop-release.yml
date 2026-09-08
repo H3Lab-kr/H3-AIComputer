@@ -1,0 +1,75 @@
+name: Desktop release
+on:
+  push:
+    tags: ['v*-preview*']
+permissions:
+  contents: read
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win32
+            arch: x64
+            asset: H3-Windows-x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+            asset: H3-Linux-x64
+          - os: macos-15
+            platform: darwin
+            arch: arm64
+            asset: H3-macOS-arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - run: npm ci
+        working-directory: apps/desktop
+      - run: npm test
+        working-directory: apps/desktop
+      - name: Native app smoke test (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a npm run smoke
+        working-directory: apps/desktop
+      - name: Native app smoke test (Mac / Windows)
+        if: runner.os != 'Linux'
+        run: npm run smoke
+        working-directory: apps/desktop
+      - run: node package.cjs ${{ matrix.platform }} ${{ matrix.arch }}
+        working-directory: apps/desktop
+      - name: Archive portable app
+        shell: bash
+        env:
+          H3_ASSET: ${{ matrix.asset }}
+        run: python3 scripts/archive-desktop.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: release/*
+  publish:
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: release
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          name: H3 AI Computer 0.4 · Local-first Preview
+          body_path: docs/public/DESKTOP-RELEASE.md
+          files: |
+            release/*
+            apps/web/public/downloads/H3-Mac-0.4.0-preview.zip
+            apps/web/public/downloads/H3-Mac-0.4.0-preview.zip.sha256

@@ -82,6 +82,18 @@ enum MediaFiles {
             return kind.extensions.contains($0.pathExtension.lowercased()) && values.isRegularFile == true && (values.fileSize ?? 0) > 0
         }.map(\.lastPathComponent).sorted()
     }
+    /// Called at workspace launch only, never during a live job/history refresh.
+    static func recoverInterrupted(root: URL = root) throws {
+        guard FileManager.default.fileExists(atPath: root.path) else { return }
+        let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
+        for directory in try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil) {
+            let file = directory.appendingPathComponent("request.json")
+            guard let data = try? Data(contentsOf: file), var record = try? decoder.decode(MediaRecord.self, from: data), record.status == "running" else { continue }
+            record.status = "interrupted"
+            record.note = "앱 재시작 시 완료 기록이 없는 작업입니다. 결과와 로그를 확인한 뒤 새 작업으로 다시 시도하세요."
+            try record.save(in: directory)
+        }
+    }
     static func history() -> [(MediaRecord, URL)] {
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         return ((try? FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)) ?? []).compactMap { dir in
@@ -105,6 +117,7 @@ extension MediaRecord {
         case "prepared": return "설정 확인 대기"
         case "running": return "실행 중 / 기록 확인"
         case "generated_unreviewed": return "생성 완료 · 검토 전"
+        case "interrupted": return "중단된 작업 · 확인 후 재시도"
         case "cancelled": return "중단됨"
         case "failed": return "실행 실패"
         default: return status

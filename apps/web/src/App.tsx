@@ -1,3 +1,4 @@
+import DesktopDownloads from './DesktopDownloads'
 import { t, language, setLanguage } from './i18n'
 import { canUseWebGL } from './webgl'
 import { Component, Suspense, lazy, useEffect, useRef, useState } from 'react'
@@ -244,8 +245,10 @@ function Contact({ selected, onClose }: { selected: ConsultId; onClose: () => vo
   )
 }
 export default function App() {
+  const staticView = new URLSearchParams(location.search).get('view') === 'static' || !canUseWebGL()
   const [menu, setMenu] = useState(false),
-    [exploded, setExploded] = useState(false),
+    // 히어로는 내부를 펼친 상태로 시작한다. 정적 대체 화면은 조립된 그림 한 장이라 제외한다.
+    [exploded, setExploded] = useState(!staticView),
     [paused, setPaused] = useState(false),
     [sceneActive, setSceneActive] = useState(true),
     [tab, setTab] = useState<'nvidia' | 'mac'>('nvidia'),
@@ -255,7 +258,6 @@ export default function App() {
   const reduced = useReducedMotion(),
     hero = useRef<HTMLDivElement>(null),
     menuButton = useRef<HTMLButtonElement>(null)
-  const staticView = new URLSearchParams(location.search).get('view') === 'static' || !canUseWebGL()
   useEffect(() => {
     const el = hero.current
     if (!el) return
@@ -689,7 +691,7 @@ export default function App() {
               />
               <div className="mac-panel">
                 <div>
-                  <p className="eyebrow">H3 FOR MAC / PREVIEW</p>
+                  <p className="eyebrow">H3 FOR MAC / PREVIEW 0.4</p>
                   <h3>
                     {t('이미 가진 Mac에도,')}
                     <br />
@@ -697,15 +699,21 @@ export default function App() {
                   </h3>
                   <p>
                     {t(
-                      'Apple Silicon용 네이티브 H3 앱으로 로컬 대화와 음성·이미지·영상 도구를 연결합니다. 모델과 실행 도구는 별도로 준비하며, 현재 개발자 Preview 단계입니다.',
+                      'H3 Preview 0.4는 스트리밍 대화, 대화·초안 자동 저장, 로컬 서버 찾기와 생성 작업 재시도를 제공합니다. 내 Mac의 대화·음성·이미지·영상을 하나의 작업 공간에서 이어가세요.',
                     )}
+                  </p>
+                  <a className="button primary" href="/downloads/H3-Mac-0.4.0-preview.zip" download>
+                    {t('Mac Preview 0.4 다운로드')} <ArrowUpRight size={16} />
+                  </a>
+                  <p className="mac-preview-note">
+                    {t('Apple Silicon · macOS 14+ · 모델 별도 준비 · 개발자 Preview (공증 전)')}
                   </p>
                   <button className="button primary" onClick={() => setContact('mac')}>
                     {t('Mac 도입 상담')}
                     <ArrowUpRight size={16} />
                   </button>
                   <a
-                    href="https://github.com/H3Lab-kr"
+                    href="https://github.com/H3Lab-kr/H3-AIComputer"
                     target="_blank"
                     rel="noreferrer"
                     className="text-link"
@@ -715,18 +723,21 @@ export default function App() {
                   </a>
                 </div>
                 <div className="mac-visual">
-                  <div className="mac-device">
-                    <span className="gold-badge">
-                      H3<small>AI COMPUTERS</small>
-                    </span>
-                    <span>YOUR AI. YOUR COMPUTER.</span>
-                  </div>
-                  <p>Apple Silicon · macOS 14+</p>
+                  <img
+                    className="mac-app-screenshot"
+                    src="/brand/h3-mac-preview-04.png"
+                    alt={t('H3 Mac 앱 실제 화면 · 시작 준비와 생성 워크스페이스')}
+                    loading="lazy"
+                    width="1860"
+                    height="1312"
+                  />
+                  <p>{t('실제 Mac 앱 화면 · Preview 0.4')}</p>
                 </div>
               </div>
             </>
           )}
         </section>
+        <DesktopDownloads />
         <section className="workspace-section" id="workspace">
           <div className="section-shell">
             <div className="section-heading">
@@ -867,7 +878,7 @@ export default function App() {
               <br />
               {t('H3는 막연한 최고 성능보다, 당신의 작업에 맞는 근거를 쌓습니다.')}
             </p>
-            <a href="https://github.com/H3Lab-kr" target="_blank" rel="noreferrer">
+            <a href="https://github.com/H3Lab-kr/H3-AIComputer" target="_blank" rel="noreferrer">
               {t('개발 기록과 함께')}
               <ArrowUpRight size={16} />
             </a>
@@ -927,7 +938,7 @@ export default function App() {
           <div>
             <a href="#systems">{t('컴퓨터')}</a>
             <a href="#workspace">{t('워크스페이스')}</a>
-            <a href="https://github.com/H3Lab-kr" target="_blank" rel="noreferrer">
+            <a href="https://github.com/H3Lab-kr/H3-AIComputer" target="_blank" rel="noreferrer">
               GitHub <ArrowUpRight size={12} />
             </a>
             <a href="mailto:hi@h3lab.kr">

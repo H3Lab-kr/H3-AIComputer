@@ -1569,28 +1569,77 @@ h2 {
     margin-top: 27px;
     font-size: 9px;
   }
+  /* 좁은 화면에서는 겹쳐 쌓지 않고 세로로 흘린다.
+     데스크톱의 음수 inset 은 화면 밖으로 흘려보내는 연출인데, 모바일에서는
+     모델의 좌우가 잘리고 캡션·라벨·컨트롤이 본체 위에 얹힌다. */
   .hero-machine {
-    min-height: 480px;
-    margin-top: 5px;
+    min-height: 0;
+    margin-top: 18px;
+    gap: 14px;
+    align-items: stretch;
   }
   .machine-caption {
-    top: 35px;
-    left: 0;
+    position: static;
     font-size: 8px;
   }
   .scene-wrap {
-    inset: -25px -8% -40px -8%;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: clamp(300px, 52vh, 400px);
   }
   .machine-label {
-    right: 0;
-    bottom: 101px;
+    position: static;
+    border-left: 0;
+    padding: 0;
+    text-align: center;
   }
-  .concept-note {
-    font-size: 7px;
-    bottom: 5px;
+  .machine-label:before {
+    display: none;
+  }
+  .machine-label span {
+    margin-bottom: 5px;
   }
   .scene-controls {
-    bottom: 37px;
+    position: static;
+    flex-wrap: wrap;
+  }
+  .concept-note {
+    position: static;
+    font-size: 8px;
+    line-height: 1.7;
+    max-width: 34em;
+    margin: 0 auto;
+  }
+  /* 손가락으로 누를 수 있는 크기를 확보한다. 글자 크기는 그대로 두고
+     여백만 키운 뒤, 늘어난 만큼 바깥 여백에서 뺀다. */
+  .hero-film-link {
+    padding: 11px 0;
+    margin-top: 11px;
+  }
+  .hero-actions .text-link {
+    padding: 10px 0;
+  }
+  .hero-footer a {
+    padding: 12px 0;
+  }
+  .language-switch button {
+    padding: 11px 9px;
+  }
+  /* 본문 아래쪽 인라인 링크들도 같은 기준으로 누를 수 있게 한다.
+     inline 요소는 세로 padding 이 높이에 반영되지 않으므로 inline-flex 로 바꾼다. */
+  .site-footer a,
+  .footer-bottom > a,
+  .film-caption a,
+  .closing a,
+  .promise a,
+  .approach-note a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 0;
+    min-width: 24px;
+    min-height: 24px;
   }
   .hero-footer {
     left: 29px;
@@ -1879,17 +1928,14 @@ h2 {
     gap: 12px;
   }
   .hero-machine {
-    min-height: 411px;
-    margin-top: 9px;
+    margin-top: 14px;
+    gap: 12px;
   }
   .scene-wrap {
-    inset: -20px -12% -23px -12%;
+    height: clamp(260px, 46vh, 340px);
   }
   .machine-caption {
     font-size: 7px;
-  }
-  .machine-label {
-    bottom: 92px;
   }
   .machine-label strong {
     font-size: 9px;
@@ -2595,10 +2641,12 @@ h2 {
   .showcase-stage {
     height: 860px;
   }
+  /* 데스크톱은 왼쪽으로 흘려보내는 연출이지만, 좁은 화면에서는
+     제품이 화면 밖으로 잘린다. 모바일에서는 가운데에 온전히 담는다. */
   .showcase-model {
-    left: -15%;
+    left: 0;
     top: 0;
-    width: 130%;
+    width: 100%;
     height: 450px;
   }
   .showcase-watermark {
@@ -2995,5 +3043,60 @@ html[lang='en'] .section-heading h2 {
   }
   html[lang='en'] .hero h1 {
     font-size: 40px;
+  }
+}
+
+.mac-app-screenshot {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  border: 1px solid #5478a340;
+  box-shadow: 0 24px 60px #020c2440;
+}
+.mac-preview-note {
+  font-size: 12px !important;
+  line-height: 1.7;
+  /* opacity 로 흐리면 #dfe5ec 배경에서 실효 대비가 3.87 로 떨어져 WCAG AA 에 미달한다.
+     보조 텍스트로 보이되 기준을 넘는 색을 직접 지정한다. (#556170 = 4.97:1) */
+  color: #556170;
+}
+
+.desktop-downloads {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+.desktop-showcase {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 44px;
+  align-items: center;
+}
+.desktop-showcase > img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid #5579a340;
+  box-shadow: 0 25px 70px #06112530;
+}
+.desktop-showcase h3 {
+  font-size: 32px;
+  line-height: 1.4;
+}
+.desktop-showcase p {
+  line-height: 1.8;
+}
+.desktop-download-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0;
+}
+.desktop-download-buttons .button {
+  font-size: 12px;
+}
+@media (max-width: 900px) {
+  .desktop-showcase {
+    grid-template-columns: 1fr;
   }
 }

@@ -1,6 +1,15 @@
-# H3 for Mac — Developer Preview 0.3
+# H3 for Mac — Developer Preview 0.4
 
 Native SwiftUI workspace for chat, Korean speech, image and video generation. Apple Silicon, macOS 14+. Build tested on the development Mac; this is not a certification of every Mac configuration.
+
+## Preview 0.4
+
+- Streaming answers with observed time to first content (includes server wait).
+- Saved conversation and creation drafts; local server discovery on three known ports.
+- First-run checklist, automatic readiness checks for an app-owned server, live generation elapsed time, retry from recorded inputs, interrupted-job recovery.
+- Blue/navy workspace, gold H3 identity and a native app icon.
+
+[Download the Apple Silicon Preview ZIP](../../apps/web/public/downloads/H3-Mac-0.4.0-preview.zip). Unzip and move H3.app to Applications. This build has local ad-hoc signing; **Developer ID signing/notarization is not yet available**, so macOS may block first launch. The source build below remains available. Do not disable Gatekeeper globally. The archive contains the app only; models and runtimes are installed separately.
 
 ## Build and first use
 
@@ -19,9 +28,9 @@ Apple Command Line Tools are required for the build. The app itself needs no Pyt
 
 - LM Studio: `http://127.0.0.1:1234/v1`
 - Ollama: `http://127.0.0.1:11434/v1`
-- App-owned `mlx_vlm.server`: `http://127.0.0.1:1235/v1`, one concurrent sequence, maximum 2048 output tokens. After starting, check the connection when the model is ready. Stop releases this owned process.
+- App-owned `mlx_vlm.server`: `http://127.0.0.1:1235/v1`, one concurrent sequence, maximum 2048 output tokens. After starting, check the connection when the model is ready. Stop terminates this owned process. Readiness is probed automatically before enabling connection.
 
-Chat uses `/v1/models` and `/v1/chat/completions`, without streaming or API authentication. The endpoints follow [LM Studio](https://lmstudio.ai/docs/developer/openai-compat) and [Ollama](https://docs.ollama.com/api/openai-compatibility). Requests accept literal loopback IPs only, and disable redirects and HTTP proxies. A locally connected server can still call cloud services: inspect the runtime to determine actual offline behavior.
+Chat uses `/v1/models` and streaming `/v1/chat/completions`, without API authentication. The endpoints follow [LM Studio](https://lmstudio.ai/docs/developer/openai-compat) and [Ollama](https://docs.ollama.com/api/openai-compatibility). Requests accept literal loopback IPs only, and disable redirects and HTTP proxies. A locally connected server can still call cloud services: inspect the runtime to determine actual offline behavior.
 
 ## Media adapters
 
@@ -39,7 +48,7 @@ Only one app-managed media process runs at once. Stop the owned text server befo
 
 The historical local storage directory remains `~/Library/Application Support/AI Computer/Jobs/` to preserve existing jobs after rebranding. Each unique timestamped folder records `request.json`, exact arguments, stdout/stderr and outputs. Server logs have separate `Servers` folders. Executable/model paths persist in preferences. Prepared jobs contain their prompts.
 
-The sidebar separates creation from connections. Drafts survive in-app navigation, but unsaved drafts and chat are not retained after quitting. Generated job history persists. Successful file creation is marked `generated_unreviewed`; full decode, content accuracy and aesthetic quality are separate checks. CLI elapsed time includes startup and model loading, not only GPU execution.
+The sidebar separates creation from connections. Conversation and chat draft persist atomically in `conversation.json` beside Jobs. Media drafts persist in local preferences. New Conversation clears the saved conversation and chat draft. A complete exchange enters history only after streaming finishes; cancelled/failed partial output is labeled separately, with the input restored. Generated job history persists. On startup, unfinished running records become interrupted; retry creates a new timestamped record. Successful file creation is marked `generated_unreviewed`; full decode, content accuracy and aesthetic quality are separate checks. CLI elapsed time includes startup and model loading, not only GPU execution.
 
 ## Verification
 
@@ -50,4 +59,8 @@ bash scripts/test-mac-app.sh
 
 Offline tests cover the loopback client, literal argument serialization, timestamped records, default video settings, missing/empty results, environment filtering, successful/failed fake workers and cancellation. They do not substitute for real model generation or human review. Local model screens are separately recorded and are not universal performance claims.
 
-Still to implement: guided installs/repair, model download UI, persistent media workers, reference-based image editing UI, multimodal chat inputs, restart recovery, authenticated servers, signed updates and public notarization. NVIDIA hardware packages do not imply this SwiftUI app runs on Windows/Linux.
+Next milestones: guided installs/repair, model download UI, persistent media workers, reference-based image editing UI, multimodal chat inputs, authenticated servers, signed updates and public notarization. NVIDIA hardware packages do not imply this SwiftUI app runs on Windows/Linux.
+
+## Release verification — 2026-09-09
+
+Release build and offline client/media tests passed, including fragmented Korean SSE, truncated/malformed streams, conversation round-trip/clear, draft restoration, interrupted-job recovery, process failures and cancellation. A real local Qwen3.8-27B MLX 8bit stream returned a Korean answer: first content 0.663s, complete answer 2.326s. This is one request after server startup, not a throughput comparison or app-wide acceleration claim. Home screen was visually inspected. Full customer acceptance and public signing remain release gates.
