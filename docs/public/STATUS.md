@@ -17,3 +17,12 @@ For external collaboration, prepare a minimal reproducer with explicit software/
 ## Desktop Preview 0.4
 
 A shared Electron desktop client covers local chat/agent, explicit cloud/OpenRouter APIs, CLI planners and model management. Native launch and broker tests run per OS in the release workflow. Application packaging does not bundle or certify GPU/model runtimes. See [desktop guide](../../apps/desktop/README.md) and [product plan](MAC-PRODUCT-PLAN.md).
+
+### Published verification · 2026-09-09
+
+- Source implementation: `ad8d89b`; release [`v0.4.0-preview.1`](https://github.com/H3Lab-kr/H3-AIComputer/releases/tag/v0.4.0-preview.1).
+- [Release workflow](https://github.com/H3Lab-kr/H3-AIComputer/actions/runs/34282080932): Windows x64, Linux x64 and macOS arm64 unit tests, native Electron launch, local fixture-agent roundtrip, approval-denial checks, packaging and publication passed.
+- All four application archives and adjacent SHA256 files returned HTTP 200 after publication. Native SwiftUI download bytes matched SHA256 `efe1b66d9efc3529bfed7ad6ac0af75d37f9a8434d36131a7ab1189597f4c814`.
+- [h3lab.kr](https://h3lab.kr/#download) deployed to production; browser verification found all OS download links, loaded the app screenshot and reported no page errors. Local website suite: 10 passing tests.
+- Native SwiftUI fixtures and media runner checks passed. A single live, already-running local LLM agent experiment completed an approved new-text-file task. This is functional evidence, not a general performance benchmark.
+- Paid cloud generation and Codex/Claude live inference were not exercised in this release verification. GPU/media compatibility and signing/notarization remain outside the OS launch test claim.
