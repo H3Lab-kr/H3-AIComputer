@@ -1,9 +1,43 @@
 import { t } from './i18n'
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { RoundedBox, ContactShadows, OrbitControls } from '@react-three/drei'
+import {
+  RoundedBox,
+  ContactShadows,
+  OrbitControls,
+  Environment,
+  Lightformer,
+} from '@react-three/drei'
 import * as THREE from 'three'
 import { GoldBadge } from './ProductModels'
+
+export function StudioReflections() {
+  return (
+    <Environment resolution={128} frames={1}>
+      <Lightformer
+        position={[3, 4, 3]}
+        rotation={[0, -Math.PI / 4, 0]}
+        scale={[3, 7, 1]}
+        intensity={2.5}
+        color="#e4edf5"
+      />
+      <Lightformer
+        position={[-4, 2, -2]}
+        rotation={[0, Math.PI / 2, 0]}
+        scale={[2, 5, 1]}
+        intensity={1.5}
+        color="#92adc5"
+      />
+      <Lightformer
+        position={[0, 5, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={[4, 4, 1]}
+        intensity={2}
+        color="#ffffff"
+      />
+    </Environment>
+  )
+}
 
 function Label({
   text,
@@ -64,6 +98,7 @@ function Block({
     </RoundedBox>
   )
 }
+// All fan rotors lie in XZ with a Y axle; rotate the complete assembly for intake/exhaust.
 function Fan({
   at,
   radius = 0.42,
@@ -73,65 +108,102 @@ function Fan({
   radius?: number
   spin: boolean
 }) {
-  const blades = useRef<THREE.Group>(null)
+  const rotor = useRef<THREE.Group>(null)
+  const blade = useMemo(() => {
+    const shape = new THREE.Shape()
+    shape.moveTo(0.12, -0.035)
+    shape.quadraticCurveTo(0.24, -0.15, 0.39, -0.13)
+    shape.quadraticCurveTo(0.43, -0.04, 0.36, 0.08)
+    shape.quadraticCurveTo(0.2, 0.06, 0.12, 0.035)
+    shape.closePath()
+    return new THREE.ExtrudeGeometry(shape, { depth: 0.015, bevelEnabled: false, curveSegments: 8 })
+  }, [])
+  useEffect(() => () => blade.dispose(), [blade])
   useFrame((_, dt) => {
-    if (spin && blades.current) blades.current.rotation.z += Math.min(dt, 0.04) * 0.8
+    if (spin && rotor.current) rotor.current.rotation.y += Math.min(dt, 0.04) * 1.8
   })
   return (
-    <group position={at}>
+    <group position={at} scale={radius / 0.42}>
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[radius, 0.025, 8, 40]} />
-        <meshStandardMaterial color="#5a6b82" metalness={0.8} roughness={0.35} />
+        <torusGeometry args={[0.435, 0.035, 8, 40]} />
+        <meshStandardMaterial color="#63717d" metalness={0.75} roughness={0.32} />
       </mesh>
-      <group rotation={[-Math.PI / 2, 0, 0]}>
-        <group ref={blades}>
-          {Array.from({ length: 9 }, (_, i) => (
-            <group key={i} rotation={[0, 0, (i * Math.PI * 2) / 9]}>
-              <mesh position={[radius * 0.47, 0, 0]} rotation={[0, 0, 0.55]}>
-                <boxGeometry args={[radius * 0.84, radius * 0.23, 0.035]} />
-                <meshStandardMaterial color="#303944" metalness={0.6} roughness={0.4} />
-              </mesh>
-            </group>
-          ))}
-        </group>
+      <mesh position={[0, -0.045, 0]}>
+        <cylinderGeometry args={[0.42, 0.42, 0.02, 40]} />
+        <meshStandardMaterial color="#080d13" roughness={0.9} />
+      </mesh>
+      <group ref={rotor}>
+        {Array.from({ length: 7 }, (_, i) => (
+          <group key={i} rotation={[0, (i * Math.PI * 2) / 7, 0]}>
+            <mesh geometry={blade} rotation={[-Math.PI / 2, 0, 0]}>
+              <meshStandardMaterial color="#38434e" metalness={0.35} roughness={0.48} />
+            </mesh>
+          </group>
+        ))}
         <mesh>
-          <cylinderGeometry args={[radius * 0.24, radius * 0.24, 0.08, 20]} />
-          <meshStandardMaterial color="#97a5b7" metalness={0.7} roughness={0.3} />
+          <cylinderGeometry args={[0.115, 0.115, 0.065, 24]} />
+          <meshStandardMaterial color="#101820" metalness={0.6} roughness={0.3} />
         </mesh>
       </group>
-      <mesh>
-        <cylinderGeometry args={[radius * 0.15, radius * 0.15, 0.11, 20]} />
-        <meshStandardMaterial color="#14171c" />
-      </mesh>
+      {[-0.44, 0.44].flatMap((x) =>
+        [-0.44, 0.44].map((z) => (
+          <mesh key={`${x}${z}`} position={[x, 0, z]}>
+            <cylinderGeometry args={[0.028, 0.028, 0.045, 8]} />
+            <meshStandardMaterial color="#8e969e" metalness={0.85} roughness={0.3} />
+          </mesh>
+        )),
+      )}
     </group>
   )
 }
-function GPU({
-  at,
-  spin,
-  primary = false,
-}: {
-  at: [number, number, number]
-  spin: boolean
-  primary?: boolean
-}) {
+function GPU({ spin }: { spin: boolean }) {
   return (
-    <group position={at}>
-      <Block at={[0, 0, 0]} size={[2.05, 0.18, 1.3]} color="#181e25" />
-      <Block at={[0, 0.11, 0]} size={[2.1, 0.14, 1.34]} color="#56667b" metal={0.9} />
-      {[-0.53, 0.53].map((x) => (
-        <Fan key={x} at={[x, 0.21, 0]} radius={0.43} spin={spin} />
-      ))}
-      <Block at={[0, -0.11, 0.67]} size={[1.88, 0.12, 0.045]} color="#739acc" metal={0.1} />
-      {Array.from({ length: 15 }, (_, i) => (
+    <group>
+      {/* Generic partner-style card. Rear bracket at -Z, intake faces down. */}
+      <Block at={[0, 0, 0]} size={[1.1, 0.38, 2.5]} color="#222930" />
+      <Block at={[0, 0.21, 0]} size={[1.08, 0.035, 2.46]} color="#77828d" rough={0.38} />
+      {Array.from({ length: 8 }, (_, i) => (
         <Block
-          key={i}
-          at={[-0.87 + i * 0.124, -0.025, 0.7]}
-          size={[0.025, 0.13, 0.08]}
-          color="#788aa1"
+          key={`backplate-${i}`}
+          at={[0.12, 0.232, -0.95 + i * 0.13]}
+          size={[0.68, 0.006, 0.025]}
+          color="#24303a"
         />
       ))}
-      {primary && <GoldBadge position={[0.6, 0.04, 0.748]} scale={0.32} />}
+      {[-0.44, 0.44].flatMap((x) =>
+        [-1.12, 1.12].map((z) => (
+          <mesh key={`${x}-${z}`} position={[x, 0.236, z]}>
+            <cylinderGeometry args={[0.022, 0.022, 0.009, 8]} />
+            <meshStandardMaterial color="#111820" />
+          </mesh>
+        )),
+      )}
+      {Array.from({ length: 36 }, (_, i) => (
+        <Block
+          key={i}
+          at={[0, -0.01, -1.16 + i * 0.066]}
+          size={[1.13, 0.24, 0.017]}
+          color="#a4aeb6"
+          rough={0.45}
+        />
+      ))}
+      {[-0.66, 0.3].map((z) => (
+        <group key={z} position={[0, -0.24, z]} rotation={[Math.PI, 0, 0]}>
+          <Fan at={[0, 0, 0]} radius={0.42} spin={spin} />
+        </group>
+      ))}
+      <Block at={[0, 0, -1.3]} size={[1.16, 0.44, 0.04]} color="#929da8" />
+      {[-0.34, 0, 0.34].map((x) => (
+        <Block key={x} at={[x, 0, -1.325]} size={[0.2, 0.085, 0.02]} color="#080c10" />
+      ))}
+      <Block at={[-0.59, 0.12, -0.24]} size={[0.035, 0.18, 1.15]} color="#bf9a55" />
+      <Label
+        text="H3 / GRAPHICS"
+        position={[0.58, 0.02, 0]}
+        rotation={[0, Math.PI / 2, 0]}
+        width={1.6}
+      />
+      <Block at={[0.6, 0.18, 0.66]} size={[0.17, 0.13, 0.22]} color="#0c121a" />
     </group>
   )
 }
@@ -166,72 +238,107 @@ function Screw({ at }: { at: [number, number, number] }) {
     </group>
   )
 }
-function EngineeringDetails() {
+function EngineeringDetails({ spin }: { spin: boolean }) {
   return (
     <group>
-      {/* Densely populated mainboard, M.2 modules and PCIe contacts. */}
-      {Array.from({ length: 18 }, (_, i) => (
-        <group key={i} position={[-1.085, -0.8 + (i % 6) * 0.36, -0.85 + Math.floor(i / 6) * 0.53]}>
-          <Block at={[0, 0, 0]} size={[0.07, 0.16, 0.22]} color="#172136" />
-          {[0, 1, 2].map((j) => (
-            <Block
-              key={j}
-              at={[0.045, -0.045 + j * 0.045, 0]}
-              size={[0.01, 0.013, 0.24]}
-              color="#9aa9bd"
-            />
-          ))}
+      <Block
+        at={[-0.83, 0.15, -0.24]}
+        size={[0.045, 2.4, 1.98]}
+        color="#132422"
+        metal={0.15}
+        rough={0.75}
+      />
+      {/* ATX-style CPU socket, VRM heatsinks, four DIMMs and M.2 spreaders. */}
+      <Block at={[-0.75, 0.8, -0.48]} size={[0.12, 0.59, 0.59]} color="#86939e" />
+      <Block at={[-0.61, 0.8, -0.48]} size={[0.23, 0.46, 0.46]} color="#19222b" />
+      <Label
+        text="CPU / AIO"
+        position={[-0.48, 0.8, -0.48]}
+        rotation={[0, Math.PI / 2, 0]}
+        width={0.43}
+      />
+      <Block at={[-0.7, 1.3, -0.5]} size={[0.2, 0.22, 0.85]} color="#59656f" />
+      {Array.from({ length: 4 }, (_, i) => (
+        <group key={i}>
+          <Block at={[-0.76, 0.7, 0.16 + i * 0.16]} size={[0.14, 1.08, 0.065]} color="#151c24" />
+          <Block at={[-0.66, 0.7, 0.16 + i * 0.16]} size={[0.07, 0.91, 0.042]} color="#87929c" />
         </group>
       ))}
-      {Array.from({ length: 9 }, (_, i) => (
-        <mesh key={i} position={[-0.99, 1.43, -0.82 + i * 0.18]} rotation={[0, 0, Math.PI / 2]}>
-          <cylinderGeometry args={[0.045, 0.045, 0.16, 12]} />
-          <meshStandardMaterial color="#c4ccd7" metalness={0.8} roughness={0.3} />
+      {[-0.15, -0.82].map((y) => (
+        <Block key={y} at={[-0.72, y, -0.4]} size={[0.12, 0.15, 0.93]} color="#5c6975" />
+      ))}
+      {Array.from({ length: 10 }, (_, i) => (
+        <mesh key={i} position={[-0.73, 1.26, -1.08 + i * 0.1]} rotation={[0, 0, Math.PI / 2]}>
+          <cylinderGeometry args={[0.035, 0.035, 0.09, 10]} />
+          <meshStandardMaterial color="#b5bdc5" metalness={0.8} roughness={0.4} />
         </mesh>
       ))}
-      {/* Radiator fins and suspended cooling assembly. */}
-      <Block at={[0, 1.48, -0.15]} size={[2.16, 0.18, 1.85]} color="#152035" />
-      {Array.from({ length: 24 }, (_, i) => (
+      {/* Top 240-class radiator, two fans along chassis depth. */}
+      <Block at={[0, 1.49, -0.1]} size={[1.14, 0.18, 2.32]} color="#141c23" />
+      {Array.from({ length: 32 }, (_, i) => (
         <Block
           key={i}
-          at={[-1 + i * 0.087, 1.58, -0.15]}
-          size={[0.022, 0.07, 1.7]}
-          color="#5a6a80"
+          at={[0, 1.595, -1.16 + i * 0.067]}
+          size={[1.02, 0.045, 0.018]}
+          color="#596773"
+          rough={0.6}
         />
       ))}
-      <Fan at={[-0.54, 1.62, -0.15]} radius={0.44} spin={false} />
-      <Fan at={[0.54, 1.62, -0.15]} radius={0.44} spin={false} />
-      {[0, 0.14].map((offset, i) => (
+      {[-0.67, 0.45].map((z) => (
+        <Fan key={z} at={[0, 1.68, z]} radius={0.43} spin={spin} />
+      ))}
+      {[0, 0.12].map((o, i) => (
         <Cable
           key={i}
           points={[
-            [-0.53, 0.94, -0.45 + offset],
-            [0.06, 1.15, -0.65 + offset],
-            [0.61, 1.1, -0.46 + offset],
-            [0.62, 1.48, -0.35 + offset],
+            [-0.49, 0.9, -0.55 + o],
+            [-0.12, 1.03, -0.73 + o],
+            [0.43, 1.25, -0.8 + o],
+            [0.43, 1.49, -0.93 + o],
           ]}
-          color="#202c41"
-          radius={0.065}
+          radius={0.042}
+          color="#1a222b"
         />
       ))}
-      {Array.from({ length: 5 }, (_, i) => (
+      {/* Front intake and rear exhaust on physically consistent axes. */}
+      {[-0.64, 0.37, 1.33].map((y) => (
+        <group key={y} position={[0, y, 1.53]} rotation={[Math.PI / 2, 0, 0]}>
+          <Fan at={[0, 0, 0]} radius={0.43} spin={spin} />
+        </group>
+      ))}
+      <group position={[0.1, 0.82, -1.57]} rotation={[Math.PI / 2, 0, 0]}>
+        <Fan at={[0, 0, 0]} radius={0.4} spin={spin} />
+      </group>
+      <Block at={[0, -1.4, -0.85]} size={[1.22, 0.6, 1.27]} color="#202830" />
+      <Block at={[0, -1.06, 0]} size={[1.73, 0.065, 3.13]} color="#29333e" />
+      <Label
+        text="ISOLATED POWER / CABLE BAY"
+        position={[0.9, -1.42, 0.05]}
+        rotation={[0, Math.PI / 2, 0]}
+        width={1.5}
+      />
+      {Array.from({ length: 4 }, (_, i) => (
         <Cable
           key={i}
           points={[
-            [0.94, -0.18, 0.15 + i * 0.05],
-            [1.1, -0.4, 0.3 + i * 0.05],
-            [0.95, -1.15, 0.1 + i * 0.05],
-            [0.43, -1.3, 0.17 + i * 0.05],
+            [0.64, -0.1, 0.6 + i * 0.04],
+            [0.79, -0.38, 0.65 + i * 0.04],
+            [0.76, -0.85, 0.5 + i * 0.04],
+            [0.52, -1.25, 0.36 + i * 0.04],
           ]}
-          color={i === 2 ? '#668aaa' : '#182338'}
-          radius={0.026}
+          radius={0.018}
         />
       ))}
-      <Block at={[0.64, -1.44, 0.65]} size={[0.68, 0.3, 0.09]} color="#0b1323" />
-      <Label text="MODULAR POWER" position={[0.2, -1.4, 0.72]} width={1.5} />
-      {[-1.14, 1.14].flatMap((x) =>
-        [-1.65, 1.63].map((y) => <Screw key={`${x}${y}`} at={[x, y, 1.345]} />),
-      )}
+      <Block at={[-0.38, 0.72, -1.67]} size={[0.5, 1.35, 0.035]} color="#424e5b" />
+      {Array.from({ length: 6 }, (_, i) => (
+        <Block
+          key={i}
+          at={[-0.38, 0.21 + i * 0.2, -1.695]}
+          size={[0.31, 0.1, 0.02]}
+          color="#0d1117"
+        />
+      ))}
+      <Block at={[0.2, -1.4, -1.69]} size={[0.28, 0.18, 0.06]} color="#10151b" />
     </group>
   )
 }
@@ -287,125 +394,99 @@ export function Workstation({
   const spin = !reduced && !paused
   return (
     <group ref={root} position={[0, -0.1, 0]} scale={0.88}>
-      <EngineeringDetails />
-      <Block at={[0, -1.8, 0]} size={[2.7, 0.18, 2.5]} color="#96a4b6" />
-      <Block at={[-1.26, 0, 0]} size={[0.13, 3.6, 2.44]} color="#657992" />
-      <Block at={[0, 0, -1.18]} size={[2.55, 3.6, 0.1]} color="#303944" />
-      {[-1.28, 1.28].flatMap((x) =>
-        [-1.2, 1.2].map((z) => (
-          <Block key={`${x}-${z}`} at={[x, 0, z]} size={[0.105, 3.68, 0.105]} color="#9ca9bb" />
+      <EngineeringDetails spin={spin} />
+      <Block at={[0, -1.8, 0]} size={[1.96, 0.13, 3.5]} color="#667380" />
+      <Block at={[-0.94, 0, 0]} size={[0.045, 3.55, 3.4]} color="#34414d" rough={0.48} />
+      {[-0.93, 0.93].flatMap((x) =>
+        [-1.65, 1.65].map((z) => (
+          <Block key={`${x}${z}`} at={[x, 0, z]} size={[0.055, 3.6, 0.055]} color="#73808b" />
         )),
       )}
-      {[-0.99, 0.99].flatMap((x) =>
-        [-0.88, 0.88].map((z) => (
-          <Block key={`${x}-${z}`} at={[x, -1.99, z]} size={[0.31, 0.24, 0.42]} color="#212830" />
+      {[-0.7, 0.7].flatMap((x) =>
+        [-1.25, 1.25].map((z) => (
+          <Block
+            key={`${x}${z}`}
+            at={[x, -1.95, z]}
+            size={[0.23, 0.19, 0.38]}
+            color="#111920"
+            rough={0.75}
+          />
         )),
       )}
-      <Block
-        at={[-1.15, 0.21, -0.07]}
-        size={[0.08, 2.67, 1.94]}
-        color="#152234"
-        metal={0.2}
-        rough={0.65}
-      />
-      <Block at={[-0.89, 0.82, -0.19]} size={[0.45, 0.9, 0.86]} color="#5e7087" />
-      {Array.from({ length: 12 }, (_, i) => (
-        <Block
-          key={i}
-          at={[-0.58, 0.47 + i * 0.064, -0.19]}
-          size={[0.23, 0.027, 0.89]}
-          color="#a6b2c1"
-        />
-      ))}
-      <Label
-        text="CPU"
-        position={[-0.448, 0.86, -0.19]}
-        rotation={[0, Math.PI / 2, 0]}
-        width={0.55}
-      />
-      {Array.from({ length: 4 }, (_, i) => (
-        <Block
-          key={i}
-          at={[-1.04, 0.5, 0.47 + i * 0.13]}
-          size={[0.25, 1.6, 0.058]}
-          color={i % 2 ? '#92a2b7' : '#1b2026'}
-        />
-      ))}
-      <Block at={[-0.34, -1.3, -0.19]} size={[1.63, 0.7, 1.57]} color="#222830" />
-
       <group ref={gpu}>
-        <GPU at={[0.02, -0.27, 0.05]} spin={spin} primary />
-        <GPU at={[0.02, -0.83, 0.05]} spin={spin} />
+        <group position={[-0.06, -0.3, -0.27]}>
+          <GPU spin={spin} />
+        </group>
       </group>
       <group ref={roof}>
-        <Block at={[0, 1.86, 0]} size={[2.7, 0.15, 2.5]} color="#96a4b6" metal={0.88} />
-        {Array.from({ length: 12 }, (_, i) => (
+        <Block at={[0, 1.85, 0]} size={[1.96, 0.075, 3.5]} color="#88949f" rough={0.4} />
+        {Array.from({ length: 24 }, (_, i) => (
           <Block
             key={i}
-            at={[-1.1 + i * 0.2, 1.946, -0.04]}
-            size={[0.065, 0.009, 1.94]}
-            color="#323b47"
+            at={[0, 1.891, -1.45 + i * 0.125]}
+            size={[1.56, 0.006, 0.035]}
+            color="#18232d"
           />
         ))}
       </group>
       <group ref={front}>
-        <Block
-          at={[0, 0, 1.24]}
-          size={[2.53, 3.62, 0.14]}
-          color="#111e34"
-          metal={0.8}
-          rough={0.27}
-        />
-        <Block at={[0, -0.24, 1.323]} size={[2.18, 2.56, 0.026]} color="#080f1d" />
-        {Array.from({ length: 34 }, (_, i) => (
+        <Block at={[0, 0, 1.73]} size={[1.92, 3.58, 0.09]} color="#15212e" rough={0.38} />
+        <Block at={[0, -0.2, 1.782]} size={[1.69, 2.63, 0.014]} color="#070f17" rough={0.8} />
+        {Array.from({ length: 29 }, (_, i) => (
           <Block
             key={i}
-            at={[-1.06 + i * 0.064, -0.24, 1.35]}
-            size={[0.026, 2.54, 0.045]}
-            color={i % 3 === 0 ? '#596a82' : '#2a3a53'}
-            metal={0.85}
-            rough={0.25}
+            at={[-0.81 + i * 0.058, -0.2, 1.805]}
+            size={[0.019, 2.59, 0.028]}
+            color={i % 4 === 0 ? '#65747f' : '#384753'}
+            metal={0.78}
+            rough={0.4}
           />
         ))}
-        {[-1.22, 1.22].map((x) => (
+        {[-0.91, 0.91].map((x) => (
           <Block
             key={x}
-            at={[x, 0, 1.333]}
-            size={[0.025, 3.49, 0.027]}
-            color="#a9b7ca"
-            metal={0.9}
+            at={[x, 0, 1.785]}
+            size={[0.014, 3.46, 0.018]}
+            color="#bac1c5"
+            rough={0.26}
           />
         ))}
-        <GoldBadge position={[0, 1.4, 1.35]} scale={0.95} />
-        <Block at={[0, -1.62, 1.338]} size={[1.88, 0.018, 0.02]} color="#72b8ff" metal={0} />
-        <Label text="H3 PRECISION" position={[0, -1.73, 1.36]} width={1.52} />
-        <mesh position={[0.95, 1.44, 1.35]}>
-          <ringGeometry args={[0.05, 0.064, 32]} />
-          <meshBasicMaterial color="#99caff" />
+        <GoldBadge position={[-0.28, 1.38, 1.79]} scale={0.68} />
+        <mesh position={[0.64, 1.42, 1.79]}>
+          <ringGeometry args={[0.035, 0.044, 32]} />
+          <meshBasicMaterial color="#93bcdf" />
         </mesh>
-        {[-0.22, 0.08].map((x) => (
-          <Block key={x} at={[x, 1.12, 1.345]} size={[0.16, 0.045, 0.025]} color="#050b14" />
+        {[-0.14, 0.13].map((x) => (
+          <Block key={x} at={[x, 1.06, 1.789]} size={[0.15, 0.045, 0.016]} color="#060c13" />
         ))}
+        <Block at={[0, -1.59, 1.789]} size={[1.35, 0.009, 0.01]} color="#6f9dbd" metal={0} />
+        <Label text="H3 / PRECISION SYSTEMS" position={[0, -1.7, 1.796]} width={1.4} />
       </group>
       <group ref={side}>
-        <mesh position={[1.29, 0, 0]} castShadow>
-          <boxGeometry args={[0.035, 3.49, 2.31]} />
+        <mesh position={[0.96, 0, 0]}>
+          <boxGeometry args={[0.023, 3.48, 3.27]} />
           <meshPhysicalMaterial
-            color="#809aba"
-            metalness={0.15}
-            roughness={0.08}
+            color="#b5c6d2"
+            roughness={0.12}
+            metalness={0.05}
             transparent
-            opacity={0.22}
+            opacity={0.14}
             depthWrite={false}
           />
         </mesh>
-        {[-1.75, 1.75].map((y) => (
-          <Block key={y} at={[1.32, y, 0]} size={[0.065, 0.07, 2.34]} color="#8794a8" />
+        {[-1.73, 1.73].map((y) => (
+          <Block key={y} at={[0.98, y, 0]} size={[0.04, 0.055, 3.32]} color="#495763" />
         ))}
-        {[-1.13, 1.13].map((z) => (
-          <Block key={z} at={[1.32, 0, z]} size={[0.065, 3.49, 0.07]} color="#8794a8" />
+        {[-1.63, 1.63].map((z) => (
+          <Block key={z} at={[0.98, 0, z]} size={[0.04, 3.48, 0.055]} color="#495763" />
         ))}
-        <Block at={[1.32, -1.52, 0]} size={[0.07, 0.32, 2.34]} color="#61738b" />
+        {[-1.56, 1.56].flatMap((y) =>
+          [-1.48, 1.48].map((z) => (
+            <group key={`${y}${z}`} position={[0.999, y, z]} rotation={[0, Math.PI / 2, 0]}>
+              <Screw at={[0, 0, 0]} />
+            </group>
+          )),
+        )}
       </group>
     </group>
   )
@@ -431,8 +512,9 @@ export default function HardwareScene({
       frameloop={!active ? 'never' : reduced || paused ? 'demand' : 'always'}
       gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
     >
-      <ambientLight intensity={1.25} />
-      <hemisphereLight intensity={1.2} color="#f5f7ff" groundColor="#111419" />
+      <StudioReflections />
+      <ambientLight intensity={0.65} />
+      <hemisphereLight intensity={0.7} color="#f5f7ff" groundColor="#111419" />
       <directionalLight
         position={[1, 6, 4]}
         intensity={4}
