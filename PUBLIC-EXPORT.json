@@ -127,7 +127,7 @@
     "scripts/build-mac-app.sh": "3e0df9055657b54c9c0e68fde686c7e026058169f1aee4471ede50f976fcb171",
     "scripts/make-mac-icon.swift": "fe73ac695077e6f27872d24c761ae8b165df3342d20590929ff01e21f58655fd",
     "scripts/test-mac-app.sh": "c39bd9908b5779fccd4c0762dc180240d9467afe07138bb56b2961f26ff7862e",
-    "scripts/test-mac-localization.sh": "0a2918ec2643aaf3d4f07e2a54cecaea1fa818c85e7b5ea1bb24caeae5b5b0f9",
+    "scripts/test-mac-localization.sh": "a6c10cd629b20466ea00db91e95f7bf9c3c39769db60ccc2678c8d4631570799",
     "tests/test_public_tools.py": "fa8d2c162f3be064684b2384b2130c88f2309111f25b0d0e7e6560b9499b50c5",
     "tools/audio_tail.py": "adacb164f8f3b0f588e701b1c3cc15474fae25270ff8fb8f672b094a56ebdf87",
     "tools/benchmark_models.py": "4b3db6b1d78d0e5d80a5681fd041e8ded437a50da711293b42f7a554cce106f1",
