@@ -10,15 +10,11 @@ H3Lab builds on public models and the work of global runtime teams to create **A
 
 ## Meet H3 in 30 seconds
 
-From detailed hardware to a personal creative workspace and a future of connected devices. Our brand films bring the website’s 3D product designs to life. Play either language directly below.
+From detailed hardware to a personal creative workspace and a future of connected devices. Our brand films bring the website’s 3D product designs to life. Play the English film directly below.
 
 ### English · 30 seconds
 
 https://github.com/user-attachments/assets/fd1a873b-df18-472d-b4d8-ee332e81d9d8
-
-### 한국어 · 30초
-
-https://github.com/user-attachments/assets/a0556e92-18eb-4e7a-a674-1fc9a6585e98
 
 Full HD · AI-generated narration · Original music · Localized captions
 
