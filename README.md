@@ -164,4 +164,4 @@ Project source is available under the [MIT License](LICENSE). External models, r
 
 ---
 
-<p align="center"><sub>“AI 컴퓨터” (AI Computer) was jointly branded and initiated by 정락현, 문아라 and 이강훈 on 2026-09-08.<br>© 2026 정락현 · 문아라 · 이강훈 — AI 컴퓨터 brand concept and branding.</sub></p>
+<p align="center"><sub>“AI 컴퓨터” (AI Computer) refers to a PC on which AI models are installed directly to support an individual’s work and creation. 정락현, 문아라 and 이강훈 began using the term as they jointly branded “H3 AIComputer”.<br>© 2026 정락현 · 문아라 · 이강훈 — AI 컴퓨터 brand concept and branding.</sub></p>
