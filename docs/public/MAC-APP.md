@@ -81,3 +81,8 @@ python3 apps/macos/Tests/run_fixture.py
 ```
 
 The localization test captures actual rendered native views when given an output directory. README.md uses the English capture; README.ko.md uses Korean. These fixes apply to the native SwiftUI Mac app; the shared Electron Desktop Preview remains a separate download.
+
+
+Published verification (2026-09-09): the [macOS runner](https://github.com/H3Lab-kr/H3-AIComputer/actions/runs/34285704960) passed client/agent tests, native audio playback lifecycle, rendered Korean/English switching, app build and archive integrity checks. [Download release](https://github.com/H3Lab-kr/H3-AIComputer/releases/tag/mac-v0.4.1-preview.4). Archive SHA256: `bfe32a4dc444a814b83f9bbe39ff3d6c278b18b0a6b5bee5e7fbfbee2eb30fd3`.
+
+The language harness uses the accessibility tree when available and native Vision recognition of rendered pixels on hosted runners without that tree. It compares normalized text and does not skip the language-switch assertion. UI helpers are split for compatibility with older Swift compilers.
