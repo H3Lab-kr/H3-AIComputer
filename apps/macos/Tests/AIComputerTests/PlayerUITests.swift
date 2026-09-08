@@ -3,6 +3,9 @@ import AVKit
 
 @main struct PlayerUITests {
     @MainActor static func main() throws {
+        func require(_ condition: Bool, _ message: String) {
+            if !condition { fputs("::error::" + message + "\n", stderr); exit(1) }
+        }
         let app = NSApplication.shared
         app.setActivationPolicy(.accessory)
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("H3Player-" + UUID().uuidString)
@@ -29,17 +32,17 @@ import AVKit
                     if player.currentItem?.status == .readyToPlay { break }
                     try await Task.sleep(nanoseconds: 100_000_000)
                 }
-                precondition(player.currentItem?.status == .readyToPlay, "Audio preview must become ready")
+                require(player.currentItem?.status == .readyToPlay, "Audio preview must become ready: " + String(describing: player.currentItem?.error))
                 player.play()
                 try await Task.sleep(nanoseconds: 400_000_000)
-                precondition(player.currentTime().seconds > 0, "Playback must advance")
+                require(player.currentTime().seconds > 0, "Playback must advance: " + String(describing: player.currentItem?.error) + " rate=" + String(player.rate) + " wait=" + String(describing: player.reasonForWaitingToPlay))
                 player.pause()
                 let replacement = AVPlayer(url: audio)
                 host.rootView = MediaPlayer(player: replacement)
                 try await Task.sleep(nanoseconds: 300_000_000)
                 window.contentView = nil
                 try await Task.sleep(nanoseconds: 100_000_000)
-                precondition(replacement.rate == 0)
+                require(replacement.rate == 0, "Replacement must stop on teardown")
                 try FileManager.default.removeItem(at: root)
                 print("PASS: native SwiftUI/AppKit audio preview mounts, plays, replaces and tears down without crash")
                 app.terminate(nil)

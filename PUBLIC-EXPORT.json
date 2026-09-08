@@ -39,7 +39,7 @@
     "apps/macos/Tests/AIComputerTests/LocalizationUITests.swift": "fde8f7df8113f64d925cacbf814c8ae57ebf8d11add61a361df4513750ae04cb",
     "apps/macos/Tests/AIComputerTests/MediaRunnerTests.swift": "cd649e15f45ef477838fb1115ab5631caa09200d03a66637d41d2360701c9535",
     "apps/macos/Tests/AIComputerTests/MediaTests.swift": "691d8d7f08bb42ac61bad12b996082cdc6f701a59a23a58f05b748059134772a",
-    "apps/macos/Tests/AIComputerTests/PlayerUITests.swift": "e98c6cf0723fec0672fc4c8312ecaf8d9dbfb24e0456d7e5c755dc893176a0e9",
+    "apps/macos/Tests/AIComputerTests/PlayerUITests.swift": "aa4b67ff9381e266d71eacf4a5224d3930fdf17d5215396f9bb6a54da062514b",
     "apps/macos/Tests/run_fixture.py": "e290a8eacab0f013f3071894288d48a4e4a8e950a3584e7f64c40a9f9e6502b8",
     "apps/web/.prettierrc.json": "057978a4e2391f54835535a665647c072b09215696ae0b828089e92744563846",
     "apps/web/README.md": "9551d190a85dbc73c11faa82134850bfe87dd92eb50cb41cb5131eb799e93aba",
