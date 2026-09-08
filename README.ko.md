@@ -1,5 +1,3 @@
-<p align="center"><img src="assets/brand/h3-banner.svg" alt="H3 AI 컴퓨터 — 생각을 만들고, 세상을 움직이다" width="100%"></p>
-
 # H3 · AI 컴퓨터
 
 **생각을 만들고, 세상을 움직이다.**
@@ -9,6 +7,19 @@
 H3는 **당신의 목적에 맞춰 하드웨어와 AI를 함께 설계하는 컴퓨터 브랜드**입니다. 글을 쓰고, 목소리를 만들고, 이미지를 그리고, 영상을 제작합니다. 업무를 함께 풀어가는 비서에서 연결된 장치의 작업을 조율하는 시스템까지, AI 컴퓨터의 쓰임을 넓혀갑니다.
 
 H3Lab은 공개 모델과 글로벌 기술팀의 실행 기술을 바탕으로, **사용자가 실제로 활용할 수 있는 AI 환경**에 집중합니다. 필요한 컴퓨터를 고르고, 모델과 도구를 연결하고, 결과를 확인하는 경험을 하나로 만듭니다.
+
+## 30초로 만나는 H3
+
+컴퓨터의 정교한 내부부터 책상 위 창작 환경, 연결된 장치의 미래까지. 홈페이지의 3D 제품 디자인을 담은 브랜드 필름입니다. 포스터를 누르면 해당 언어의 영상을 열 수 있습니다.
+
+<table>
+<tr>
+<td width="50%" align="center"><a href="apps/web/public/media/h3-brand-film-ko.mp4"><img src="apps/web/public/media/h3-brand-poster-ko.jpg" alt="H3 AI Computer — 한국어 · 30초" width="100%"><br><b>▶ 한국어 · 30초</b></a></td>
+<td width="50%" align="center"><a href="apps/web/public/media/h3-brand-film-en.mp4"><img src="apps/web/public/media/h3-brand-poster-en.jpg" alt="H3 AI Computer — English · 30 seconds" width="100%"><br><b>▶ English · 30 seconds</b></a></td>
+</tr>
+</table>
+
+Full HD · AI 합성 나레이션 · 오리지널 음악 · 언어별 자막
 
 ## 하나의 컴퓨터, 다양한 가능성
 
@@ -25,6 +36,19 @@ H3Lab은 공개 모델과 글로벌 기술팀의 실행 기술을 바탕으로, 
 ## 목적에 맞는 AI 컴퓨터
 
 컴퓨터의 구성은 사용하려는 모델과 작업에서 시작합니다. GPU·메모리·저장 공간·전력·냉각에 실행 환경을 더해, 개인과 팀에 맞는 구성을 설계합니다.
+
+<table>
+<tr>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-nvidia.png" alt="H3 Performance · NVIDIA RTX" width="360"><br><b>H3 Performance · NVIDIA RTX</b></td>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-mini.png" alt="H3 Mini · Mac mini" width="360"><br><b>H3 Mini · Mac mini</b></td>
+</tr>
+<tr>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-studio.png" alt="H3 Mac Studio" width="360"><br><b>H3 Mac Studio</b></td>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-macpro.png" alt="H3 Mac Pro · 보유 장비 활용" width="360"><br><b>H3 Mac Pro · 보유 장비 활용</b></td>
+</tr>
+</table>
+
+홈페이지의 3D 모델을 사용한 H3 패키지 디자인 컨셉입니다. 제품을 회전하고 내부를 펼쳐 보는 화면은 [제품 쇼케이스](apps/web/README.md)에서 실행할 수 있습니다.
 
 | 제품군 | 구성 방향 |
 |---|---|
@@ -46,7 +70,13 @@ H3Lab은 공개 모델과 글로벌 기술팀의 실행 기술을 바탕으로, 
 - **로보틱스 랩:** 요청 → 실행 승인 → 제품 이동의 연결 흐름을 3D 시뮬레이션으로 체험합니다.
 - **한국어·영어:** 본문·제품 소개·상담창과 영상·나레이션·자막을 언어에 맞게 제공합니다.
 
-[한국어 30초 브랜드 필름](apps/web/public/media/h3-brand-film-ko.mp4) · [English Brand Film](apps/web/public/media/h3-brand-film-en.mp4)
+## 만들고, 돕고, 연결하는 컴퓨터
+
+![H3 AI 컴퓨터와 로봇 팔의 연결을 표현한 3D 컨셉](assets/brand/readme/robotics-ko.jpg)
+
+**대화와 콘텐츠 제작에서, 실제 작업을 조율하는 AI 컴퓨터로.** 홈페이지의 로보틱스 랩은 H3 컴퓨터·로봇 팔·카메라를 하나의 작업 셀로 표현합니다. 방문자는 제품 촬영 요청을 시작하고, 실행을 승인하고, 동작을 일시 정지하거나 다시 시작할 수 있습니다.
+
+현재 제공하는 인터랙티브 시뮬레이션을 통해 **요청 이해 → 계획 → 승인 → 동작 → 결과 확인**이라는 확장 방향을 보여줍니다. 실제 장치 연결은 하드웨어별 검증을 통해 발전시킵니다.
 
 ## Mac에서 시작하기
 

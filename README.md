@@ -1,5 +1,3 @@
-<p align="center"><img src="assets/brand/h3-banner.svg" alt="H3 AI Computers — Create ideas. Move the world." width="100%"></p>
-
 # H3 · AI Computers
 
 **Create ideas. Move the world.**
@@ -9,6 +7,19 @@
 H3 is a **computer brand that designs hardware and AI together around your purpose**. Write, speak, create images and produce video. Our vision extends from a personal work assistant to a system that coordinates connected devices.
 
 H3Lab builds on public models and the work of global runtime teams to create **AI environments people can put to work**. Choose the computer, connect the models and tools, and keep the results together in one workflow.
+
+## Meet H3 in 30 seconds
+
+From detailed hardware to a personal creative workspace and a future of connected devices. Our brand films bring the website’s 3D product designs to life. Select a poster to open the film in your language.
+
+<table>
+<tr>
+<td width="50%" align="center"><a href="apps/web/public/media/h3-brand-film-en.mp4"><img src="apps/web/public/media/h3-brand-poster-en.jpg" alt="H3 AI Computer — English · 30 seconds" width="100%"><br><b>▶ English · 30 seconds</b></a></td>
+<td width="50%" align="center"><a href="apps/web/public/media/h3-brand-film-ko.mp4"><img src="apps/web/public/media/h3-brand-poster-ko.jpg" alt="H3 AI Computer — 한국어 · 30초" width="100%"><br><b>▶ 한국어 · 30초</b></a></td>
+</tr>
+</table>
+
+Full HD · AI-generated narration · Original music · Localized captions
 
 ## One computer. Many possibilities.
 
@@ -25,6 +36,19 @@ H3Lab builds on public models and the work of global runtime teams to create **A
 ## AI computers designed around the work
 
 Configuration starts with the models and workloads you want to run. GPU, memory, storage, power and cooling are designed alongside the runtime environment for individuals and teams.
+
+<table>
+<tr>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-nvidia.png" alt="H3 Performance · NVIDIA RTX" width="360"><br><b>H3 Performance · NVIDIA RTX</b></td>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-mini.png" alt="H3 Mini · Mac mini" width="360"><br><b>H3 Mini · Mac mini</b></td>
+</tr>
+<tr>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-studio.png" alt="H3 Mac Studio" width="360"><br><b>H3 Mac Studio</b></td>
+<td width="50%" align="center"><img src="apps/web/public/brand/product-macpro.png" alt="H3 Mac Pro · Existing equipment" width="360"><br><b>H3 Mac Pro · Existing equipment</b></td>
+</tr>
+</table>
+
+H3 package design concepts rendered from the website’s shared 3D models. Run the [product showcase](apps/web/README.md) to rotate the computers and explore the RTX enclosure.
 
 | Product family | Design direction |
 |---|---|
@@ -46,7 +70,13 @@ The bilingual brand website makes the products and the vision tangible.
 - **Robotics Lab:** experience request → approval → product movement in an interactive 3D simulation.
 - **Korean & English:** localized product information, consultation forms, films, narration and captions.
 
-[Watch the English 30-second brand film](apps/web/public/media/h3-brand-film-en.mp4) · [한국어 브랜드 필름](apps/web/public/media/h3-brand-film-ko.mp4)
+## Create. Assist. Connect.
+
+![A 3D concept connecting an H3 AI computer, robot arm and camera](assets/brand/readme/robotics-en.jpg)
+
+**From conversations and content to coordinated work.** The website’s Robotics Lab brings an H3 computer, robot arm and camera into one work cell. Start a product-photography request, approve the demonstration, pause the movement and resume it.
+
+The interactive simulation explores **understand → plan → approve → act → review**. Real device connections will develop through hardware-specific validation.
 
 ## Start on Mac
 
