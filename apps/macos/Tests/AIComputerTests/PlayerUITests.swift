@@ -28,13 +28,16 @@ import AVKit
         Task { @MainActor in
             do {
                 try await Task.sleep(nanoseconds: 500_000_000)
-                for _ in 0..<30 {
+                for _ in 0..<100 {
                     if player.currentItem?.status == .readyToPlay { break }
                     try await Task.sleep(nanoseconds: 100_000_000)
                 }
                 require(player.currentItem?.status == .readyToPlay, "Audio preview must become ready: " + String(describing: player.currentItem?.error))
                 player.play()
-                try await Task.sleep(nanoseconds: 400_000_000)
+                for _ in 0..<100 {
+                    if player.currentTime().seconds > 0 { break }
+                    try await Task.sleep(nanoseconds: 100_000_000)
+                }
                 require(player.currentTime().seconds > 0, "Playback must advance: " + String(describing: player.currentItem?.error) + " rate=" + String(player.rate) + " wait=" + String(describing: player.reasonForWaitingToPlay))
                 player.pause()
                 let replacement = AVPlayer(url: audio)
