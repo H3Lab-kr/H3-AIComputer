@@ -261,7 +261,6 @@ export default function App() {
     [exploded, setExploded] = useState(!staticView),
     [paused, setPaused] = useState(false),
     [sceneActive, setSceneActive] = useState(true),
-    [tab, setTab] = useState<'nvidia' | 'mac'>('nvidia'),
     [comparison, setComparison] = useState(false),
     [contact, setContact] = useState<ConsultId | null>(null),
     [workflow, setWorkflow] = useState(0)
@@ -562,202 +561,195 @@ export default function App() {
               <p className="section-index">02 — FIND YOUR SYSTEM</p>
               <h2>{t('당신의 일에 맞는 H3.')}</h2>
             </div>
-            <div className="platform-tabs" role="group" aria-label={t('플랫폼 선택')}>
-              <button aria-pressed={tab === 'nvidia'} onClick={() => setTab('nvidia')}>
-                {t('NVIDIA 시스템')}
-              </button>
-              <button aria-pressed={tab === 'mac'} onClick={() => setTab('mac')}>
-                {t('Mac 워크스페이스')}
-              </button>
-            </div>
           </div>
-          {tab === 'nvidia' ? (
-            <>
-              <div className="product-grid">
-                {products.map((p, i) => (
-                  <article
-                    className={`product-card ${p.id === 'studio' ? 'featured' : ''}`}
-                    key={p.id}
-                  >
-                    <div className="product-topline">
-                      <span>H3 / {String(i + 1).padStart(2, '0')}</span>
+          <div className="system-family" aria-labelledby="nvidia-family-title">
+            <h3 className="system-family-title" id="nvidia-family-title">
+              {t('NVIDIA 시스템')}
+            </h3>
+            <div className="product-grid">
+              {products.map((p, i) => (
+                <article
+                  className={`product-card ${p.id === 'studio' ? 'featured' : ''}`}
+                  key={p.id}
+                >
+                  <div className="product-topline">
+                    <span>H3 / {String(i + 1).padStart(2, '0')}</span>
+                    <span>
+                      {p.id === 'studio'
+                        ? 'CREATOR EDITION'
+                        : p.id === 'core'
+                          ? 'PERSONAL'
+                          : 'PROFESSIONAL'}
+                    </span>
+                  </div>
+                  <div className="product-visual">
+                    <Tower variant={p.id} />
+                    <span className="product-sku">{p.id.toUpperCase()}</span>
+                  </div>
+                  <div className="product-content">
+                    <p className="product-use">{p.use}</p>
+                    <h3>{p.name}</h3>
+                    <p className="product-description">{p.descriptor}</p>
+                    <div className="gpu-spec">
+                      <strong>
+                        {p.memory}
+                        <small>GB</small>
+                      </strong>
                       <span>
-                        {p.id === 'studio'
-                          ? 'CREATOR EDITION'
-                          : p.id === 'core'
-                            ? 'PERSONAL'
-                            : 'PROFESSIONAL'}
+                        GPU MEMORY
+                        <br />
+                        {p.id === 'pro' ? 'GDDR7 · ECC' : 'GDDR7'}
                       </span>
                     </div>
-                    <div className="product-visual">
-                      <Tower variant={p.id} />
-                      <span className="product-sku">{p.id.toUpperCase()}</span>
+                    <p className="gpu-name">NVIDIA {p.gpu}</p>
+                    <div className="product-subspec">
+                      <span>{p.ram} RAM</span>
+                      <span>{p.storage}</span>
                     </div>
-                    <div className="product-content">
-                      <p className="product-use">{p.use}</p>
-                      <h3>{p.name}</h3>
-                      <p className="product-description">{p.descriptor}</p>
-                      <div className="gpu-spec">
-                        <strong>
-                          {p.memory}
-                          <small>GB</small>
-                        </strong>
-                        <span>
-                          GPU MEMORY
-                          <br />
-                          {p.id === 'pro' ? 'GDDR7 · ECC' : 'GDDR7'}
-                        </span>
-                      </div>
-                      <p className="gpu-name">NVIDIA {p.gpu}</p>
-                      <div className="product-subspec">
-                        <span>{p.ram} RAM</span>
-                        <span>{p.storage}</span>
-                      </div>
-                      <ul>
-                        {p.tasks.map((task) => (
-                          <li key={task}>
-                            <Check size={13} />
-                            {task}
-                          </li>
+                    <ul>
+                      {p.tasks.map((task) => (
+                        <li key={task}>
+                          <Check size={13} />
+                          {task}
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      className={`button ${p.id === 'studio' ? 'primary' : 'outline'} wide`}
+                      onClick={() => setContact(p.id)}
+                    >
+                      {p.name} {t('구성 상담')}
+                      <ArrowUpRight size={16} />
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="product-footnote">
+              <p>
+                {t(
+                  '하드웨어 구성 제안입니다. CPU·전력·냉각·모델 호환성과 공급 상황을 확인한 뒤 최종 사양·견적을 확정합니다.',
+                )}
+              </p>
+              <button
+                className="text-link"
+                aria-expanded={comparison}
+                onClick={() => setComparison(!comparison)}
+              >
+                {comparison ? t('비교 접기') : t('세 모델 자세히 비교')}
+                <ChevronDown size={16} className={comparison ? 'rotated' : ''} />
+              </button>
+            </div>
+            {comparison && (
+              <div className="comparison-wrap">
+                <table>
+                  <caption>{t('H3 NVIDIA 구성 제안 비교')}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">{t('설계 기준')}</th>
+                      {products.map((p) => (
+                        <th scope="col" key={p.id}>
+                          {p.name}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      ['GPU', ...products.map((p) => p.gpu)],
+                      [
+                        t('GPU 메모리'),
+                        ...products.map((p) => `${p.memory}GB${p.id === 'pro' ? ' ECC' : ''}`),
+                      ],
+                      [t('시스템 메모리 제안'), ...products.map((p) => p.ram)],
+                      [t('저장 장치 제안'), ...products.map((p) => p.storage)],
+                      [t('도입 방식'), ...products.map((p) => p.status)],
+                    ].map((row) => (
+                      <tr key={row[0]}>
+                        <th scope="row">{row[0]}</th>
+                        {row.slice(1).map((v, i) => (
+                          <td key={i}>{v}</td>
                         ))}
-                      </ul>
-                      <button
-                        className={`button ${p.id === 'studio' ? 'primary' : 'outline'} wide`}
-                        onClick={() => setContact(p.id)}
-                      >
-                        {p.name} {t('구성 상담')}
-                        <ArrowUpRight size={16} />
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-              <div className="product-footnote">
+                      </tr>
+                    ))}
+                    <tr>
+                      <th scope="row">{t('GPU 공식 사양')}</th>
+                      {products.map((p) => (
+                        <td key={p.id}>
+                          <a href={p.source} target="_blank" rel="noreferrer">
+                            {t('NVIDIA 확인')}
+                            <ArrowUpRight size={12} />
+                          </a>
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                </table>
                 <p>
                   {t(
-                    '하드웨어 구성 제안입니다. CPU·전력·냉각·모델 호환성과 공급 상황을 확인한 뒤 최종 사양·견적을 확정합니다.',
+                    'GPU 사양 출처 확인: 2026.09.09. VRAM은 시스템 RAM과 다르며, 멀티 GPU에서 자동으로 합산되지 않습니다.',
                   )}
                 </p>
-                <button
-                  className="text-link"
-                  aria-expanded={comparison}
-                  onClick={() => setComparison(!comparison)}
-                >
-                  {comparison ? t('비교 접기') : t('세 모델 자세히 비교')}
-                  <ChevronDown size={16} className={comparison ? 'rotated' : ''} />
+              </div>
+            )}
+          </div>
+          <div className="system-family" aria-labelledby="mac-family-title">
+            <h3 className="system-family-title" id="mac-family-title">
+              {t('Mac 워크스페이스')}
+            </h3>
+            <MacPackageCards
+              onConsult={(family) =>
+                setContact(
+                  family === 'studio' ? 'macstudio' : family === 'nvidia' ? 'studio' : family,
+                )
+              }
+            />
+            <div className="mac-panel">
+              <div>
+                <p className="eyebrow">H3 FOR MAC / PREVIEW 0.5.0</p>
+                <h3>
+                  {t('이미 가진 Mac에도,')}
+                  <br />
+                  {t('당신의 AI 작업 공간.')}
+                </h3>
+                <p>
+                  {t(
+                    'H3 Preview 0.5.0에서 AI에게 선택한 Mac 앱의 화면 읽기, 버튼 누르기, 텍스트 입력을 맡기세요. 로컬 브레인을 기본으로, 실행 전 확인과 한국어·영어 화면을 제공합니다.',
+                  )}
+                </p>
+                <a className="button primary" href="/downloads/H3-Mac-0.5.0-preview.zip" download>
+                  {t('Mac Preview 0.5.0 다운로드')} <ArrowUpRight size={16} />
+                </a>
+                <p className="mac-preview-note">
+                  {t('Apple Silicon · macOS 14+ · 모델 별도 준비 · 개발자 Preview (공증 전)')}
+                </p>
+                <button className="button primary" onClick={() => setContact('mac')}>
+                  {t('Mac 도입 상담')}
+                  <ArrowUpRight size={16} />
                 </button>
+                <a
+                  href="https://github.com/H3Lab-kr/H3-AIComputer"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-link"
+                >
+                  {t('H3Lab 개발 프로젝트')}
+                  <ArrowUpRight size={14} />
+                </a>
               </div>
-              {comparison && (
-                <div className="comparison-wrap">
-                  <table>
-                    <caption>{t('H3 NVIDIA 구성 제안 비교')}</caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">{t('설계 기준')}</th>
-                        {products.map((p) => (
-                          <th scope="col" key={p.id}>
-                            {p.name}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        ['GPU', ...products.map((p) => p.gpu)],
-                        [
-                          t('GPU 메모리'),
-                          ...products.map((p) => `${p.memory}GB${p.id === 'pro' ? ' ECC' : ''}`),
-                        ],
-                        [t('시스템 메모리 제안'), ...products.map((p) => p.ram)],
-                        [t('저장 장치 제안'), ...products.map((p) => p.storage)],
-                        [t('도입 방식'), ...products.map((p) => p.status)],
-                      ].map((row) => (
-                        <tr key={row[0]}>
-                          <th scope="row">{row[0]}</th>
-                          {row.slice(1).map((v, i) => (
-                            <td key={i}>{v}</td>
-                          ))}
-                        </tr>
-                      ))}
-                      <tr>
-                        <th scope="row">{t('GPU 공식 사양')}</th>
-                        {products.map((p) => (
-                          <td key={p.id}>
-                            <a href={p.source} target="_blank" rel="noreferrer">
-                              {t('NVIDIA 확인')}
-                              <ArrowUpRight size={12} />
-                            </a>
-                          </td>
-                        ))}
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p>
-                    {t(
-                      'GPU 사양 출처 확인: 2026.09.09. VRAM은 시스템 RAM과 다르며, 멀티 GPU에서 자동으로 합산되지 않습니다.',
-                    )}
-                  </p>
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              <MacPackageCards
-                onConsult={(family) =>
-                  setContact(
-                    family === 'studio' ? 'macstudio' : family === 'nvidia' ? 'studio' : family,
-                  )
-                }
-              />
-              <div className="mac-panel">
-                <div>
-                  <p className="eyebrow">H3 FOR MAC / PREVIEW 0.5.0</p>
-                  <h3>
-                    {t('이미 가진 Mac에도,')}
-                    <br />
-                    {t('당신의 AI 작업 공간.')}
-                  </h3>
-                  <p>
-                    {t(
-                      'H3 Preview 0.5.0에서 AI에게 선택한 Mac 앱의 화면 읽기, 버튼 누르기, 텍스트 입력을 맡기세요. 로컬 브레인을 기본으로, 실행 전 확인과 한국어·영어 화면을 제공합니다.',
-                    )}
-                  </p>
-                  <a className="button primary" href="/downloads/H3-Mac-0.5.0-preview.zip" download>
-                    {t('Mac Preview 0.5.0 다운로드')} <ArrowUpRight size={16} />
-                  </a>
-                  <p className="mac-preview-note">
-                    {t('Apple Silicon · macOS 14+ · 모델 별도 준비 · 개발자 Preview (공증 전)')}
-                  </p>
-                  <button className="button primary" onClick={() => setContact('mac')}>
-                    {t('Mac 도입 상담')}
-                    <ArrowUpRight size={16} />
-                  </button>
-                  <a
-                    href="https://github.com/H3Lab-kr/H3-AIComputer"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-link"
-                  >
-                    {t('H3Lab 개발 프로젝트')}
-                    <ArrowUpRight size={14} />
-                  </a>
-                </div>
-                <div className="mac-visual">
-                  <img
-                    className="mac-app-screenshot"
-                    src={
-                      language === 'en' ? '/brand/h3-mac-041-en.png' : '/brand/h3-mac-041-ko.png'
-                    }
-                    alt={t('H3 Mac 앱 실제 화면 · 시작 준비와 생성 워크스페이스')}
-                    loading="lazy"
-                    width="1860"
-                    height="1312"
-                  />
-                  <p>{t('실제 Mac 앱 화면 · Preview 0.4')}</p>
-                </div>
+              <div className="mac-visual">
+                <img
+                  className="mac-app-screenshot"
+                  src={language === 'en' ? '/brand/h3-mac-041-en.png' : '/brand/h3-mac-041-ko.png'}
+                  alt={t('H3 Mac 앱 실제 화면 · 시작 준비와 생성 워크스페이스')}
+                  loading="lazy"
+                  width="1860"
+                  height="1312"
+                />
+                <p>{t('실제 Mac 앱 화면 · Preview 0.4')}</p>
               </div>
-            </>
-          )}
+            </div>
+          </div>
         </section>
         <DesktopDownloads />
         <section className="workspace-section" id="workspace">

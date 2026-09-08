@@ -607,23 +607,15 @@ h2 {
 .systems {
   padding-top: 95px;
 }
-.platform-tabs {
-  display: flex;
-  border-bottom: 1px solid #bdc6d1;
-  gap: 24px;
-  padding-bottom: 0;
+.system-family + .system-family {
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid #bdc6d1;
 }
-.platform-tabs button {
-  background: none;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  padding: 14px 0;
-  font-size: 11px;
-  color: #475567;
-}
-.platform-tabs button[aria-pressed='true'] {
-  border-color: #27384f;
-  color: #182332;
+.system-family-title {
+  margin: 0 0 24px;
+  color: #27384f;
+  font-size: clamp(20px, 2.2vw, 28px);
   font-weight: 600;
 }
 .product-grid {
@@ -1716,10 +1708,6 @@ h2 {
   }
   .section-heading > p {
     font-size: 12px;
-  }
-  .platform-tabs {
-    align-self: stretch;
-    gap: 30px;
   }
   .product-grid {
     grid-template-columns: 1fr;
