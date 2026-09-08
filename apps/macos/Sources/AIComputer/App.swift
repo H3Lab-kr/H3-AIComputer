@@ -157,6 +157,9 @@ struct ContentView: View {
                 }.padding(32).frame(maxWidth: .infinity, maxHeight: .infinity)
             }.background(Color(nsColor: .windowBackgroundColor))
         }.tint(H3Style.accent)
+        // Read the language value in this body: passing only $language to Picker
+        // does not reliably invalidate sibling strings on older SwiftUI releases.
+        .environment(\.locale, Locale(identifier: language))
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willTerminateNotification)) { _ in if !vm.busy { vm.persist() }; vm.stop(); media.shutdown(); server.shutdown(); agent.shutdown(); modelLibrary.stop(); cloudMedia.stop() }
         .onAppear {
             agent.prepareMedia = { action in

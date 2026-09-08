@@ -26,8 +26,9 @@ import Vision
   Task { @MainActor in
    for language in ["en","ko","en"] {
     UserDefaults.standard.set(language,forKey:"app.language")
-    let expected=language=="en" ? "Local workspace" : "로컬 워크스페이스"
+    let expected=language=="en" ? "Think it through" : "생각을 정리하고"
     var all=""
+    func normalized(_ text: String) -> String { text.lowercased().filter{ !$0.isWhitespace && !$0.isPunctuation } }
     let deadline=Date().addingTimeInterval(20)
     while Date()<deadline {
      try? await Task.sleep(nanoseconds:200_000_000)
@@ -48,10 +49,10 @@ import Vision
        } catch {fputs("::error::Rendered UI text recognition: " + error.localizedDescription + "\n",stderr);exit(1)}
       }
      }
-     if all.contains(expected) { break }
+     if normalized(all).contains(normalized(expected)) { break }
     }
-    guard all.contains(expected) else {
-     fputs("::error::Native UI language did not become " + language + "; accessibility text length=" + String(all.count) + "\n",stderr)
+    guard normalized(all).contains(normalized(expected)) else {
+     fputs("::error::Native UI language did not become " + language + "; recognized text length=" + String(all.count) + "; English heading=" + String(all.contains("Think")) + "; Korean heading=" + String(all.contains("생각")) + "\n",stderr)
      exit(1)
     }
     if CommandLine.arguments.count>1 {
