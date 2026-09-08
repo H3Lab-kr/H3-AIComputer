@@ -10,14 +10,15 @@ H3Lab builds on public models and the work of global runtime teams to create **A
 
 ## Meet H3 in 30 seconds
 
-From detailed hardware to a personal creative workspace and a future of connected devices. Our brand films bring the website’s 3D product designs to life. Select a poster to open the film in your language.
+From detailed hardware to a personal creative workspace and a future of connected devices. Our brand films bring the website’s 3D product designs to life. Play either language directly below.
 
-<table>
-<tr>
-<td width="50%" align="center"><a href="apps/web/public/media/h3-brand-film-en.mp4"><img src="apps/web/public/media/h3-brand-poster-en.jpg" alt="H3 AI Computer — English · 30 seconds" width="100%"><br><b>▶ English · 30 seconds</b></a></td>
-<td width="50%" align="center"><a href="apps/web/public/media/h3-brand-film-ko.mp4"><img src="apps/web/public/media/h3-brand-poster-ko.jpg" alt="H3 AI Computer — 한국어 · 30초" width="100%"><br><b>▶ 한국어 · 30초</b></a></td>
-</tr>
-</table>
+### English · 30 seconds
+
+https://github.com/user-attachments/assets/fd1a873b-df18-472d-b4d8-ee332e81d9d8
+
+### 한국어 · 30초
+
+https://github.com/user-attachments/assets/a0556e92-18eb-4e7a-a674-1fc9a6585e98
 
 Full HD · AI-generated narration · Original music · Localized captions
 
