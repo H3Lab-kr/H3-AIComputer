@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import Vision
 
 /// Renders the production ContentView, switches language without replacing it,
 /// and optionally captures the actual native view for bilingual documentation.
@@ -27,10 +28,26 @@ import AppKit
     UserDefaults.standard.set(language,forKey:"app.language")
     let expected=language=="en" ? "Local workspace" : "로컬 워크스페이스"
     var all=""
-    for _ in 0..<100 {
-     try? await Task.sleep(nanoseconds:100_000_000)
+    let deadline=Date().addingTimeInterval(20)
+    while Date()<deadline {
+     try? await Task.sleep(nanoseconds:200_000_000)
      host.layoutSubtreeIfNeeded()
      all=labels(host).joined(separator:"\n")
+     // Some hosted macOS runners expose no in-process accessibility tree.
+     // Verify the actual rendered pixels instead of silently skipping the test.
+     if all.trimmingCharacters(in:.whitespacesAndNewlines).isEmpty || ProcessInfo.processInfo.environment["H3_TEST_OCR"] == "1" {
+      let rep=host.bitmapImageRepForCachingDisplay(in:host.bounds)!
+      host.cacheDisplay(in:host.bounds,to:rep)
+      if let image=rep.cgImage {
+       let request=VNRecognizeTextRequest()
+       request.recognitionLanguages=language=="ko" ? ["ko-KR","en-US"] : ["en-US"]
+       request.usesLanguageCorrection=false
+       do {
+        try VNImageRequestHandler(cgImage:image,options:[:]).perform([request])
+        all=(request.results ?? []).compactMap{$0.topCandidates(1).first?.string}.joined(separator:"\n")
+       } catch {fputs("::error::Rendered UI text recognition: " + error.localizedDescription + "\n",stderr);exit(1)}
+      }
+     }
      if all.contains(expected) { break }
     }
     guard all.contains(expected) else {
