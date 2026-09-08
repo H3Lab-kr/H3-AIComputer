@@ -15,26 +15,19 @@ export default function DesktopDownloads() {
         <p>{t('설치된 모델이 기본입니다. 필요할 때 OpenRouter, Codex, Claude를 선택하세요.')}</p>
       </div>
       <div className="desktop-showcase">
-        {/* 데스크톱 Preview 0.4 의 화면은 아직 한국어만 있다. 영어 화면을 지어내지 않고,
-            영어로 볼 때는 실제 인터페이스 언어를 그대로 밝힌다. */}
         <figure className="desktop-shot">
           <img
-            src="/brand/h3-desktop-preview-04.png"
+            src={language === 'en' ? '/brand/h3-mac-041-en.png' : '/brand/h3-mac-041-ko.png'}
             alt={
               language === 'en'
-                ? 'H3 desktop app, Preview 0.4, shown with its Korean interface'
-                : t('H3 데스크톱 앱 실제 화면')
+                ? 'H3 native Mac app — English interface'
+                : 'H3 Mac 네이티브 앱 — 한국어 화면'
             }
             loading="lazy"
-            width="1920"
-            height="1302"
+            width="2440"
+            height="1720"
           />
-          {language === 'en' && (
-            <figcaption>
-              Actual Preview 0.4 screen. The desktop interface is currently Korean only; English is
-              in progress. The Mac app already switches between Korean and English.
-            </figcaption>
-          )}
+          <figcaption>H3 for Mac · {language === 'en' ? 'English' : '한국어'}</figcaption>
         </figure>
         <div>
           <p className="eyebrow">DESKTOP PREVIEW 0.4</p>

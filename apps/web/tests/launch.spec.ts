@@ -169,6 +169,10 @@ test('language switch translates content, consultation and remembers selection',
   await page.goto('/?view=static&lang=ko')
   await page.getByRole('button', { name: 'EN', exact: true }).click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+  await expect(page.locator('#download .desktop-shot img')).toHaveAttribute(
+    'src',
+    '/brand/h3-mac-041-en.png',
+  )
   await expect(page.getByRole('heading', { level: 1 })).toContainText('H3 AI Computer')
   await expect(page.locator('body')).not.toContainText('당신')
   await page.getByRole('button', { name: 'Configure my H3', exact: true }).click()
@@ -181,6 +185,10 @@ test('language switch translates content, consultation and remembers selection',
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()
   await page.getByRole('button', { name: 'KO', exact: true }).click()
   await expect(page.locator('html')).toHaveAttribute('lang', 'ko')
+  await expect(page.locator('#download .desktop-shot img')).toHaveAttribute(
+    'src',
+    '/brand/h3-mac-041-ko.png',
+  )
 })
 
 test('English interface meets accessibility checks', async ({ page }) => {
