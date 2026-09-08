@@ -12,6 +12,19 @@ npm run preview -- --port 4173
 
 Use Node 22.12+ (tested with Node 24). `/?view=static` uses the lightweight illustrated hardware view. Reduced-motion preferences disable automatic animation. The scene pauses when the hero is outside the viewport or the tab is hidden. WebGL creation failure falls back to the illustration. Paperozi font files load from jsDelivr as needed. No analytics, model downloads or generation API calls run on page load.
 
+## Deploy to Vercel
+
+This site uses **Vite**. `vercel.json` explicitly selects Vite, `npm ci`, `npm run build` and the `dist` output directory.
+
+For deployment from this folder:
+
+```sh
+cd apps/web
+vercel --prod
+```
+
+For GitHub-connected deployment, set Vercel’s **Root Directory** to `apps/web` and **Framework Preset** to `Vite`. For CLI deployment from `apps/web`, the uploaded project already starts here; leave the remote Root Directory empty. A “No Next.js version detected” error indicates a mismatched framework or project root; use these settings with the checked-in configuration.
+
 ## Verify changes
 
 ```sh

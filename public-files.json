@@ -64,6 +64,7 @@
   "apps/web/src/webgl.ts",
   "apps/web/tests/launch.spec.ts",
   "apps/web/tsconfig.json",
+  "apps/web/vercel.json",
   "apps/web/vite.config.ts",
   "assets/brand/h3-banner.svg",
   "assets/brand/h3-mark.svg",
