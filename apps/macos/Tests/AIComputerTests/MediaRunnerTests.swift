@@ -6,9 +6,9 @@ import Foundation
         defer { defaults.removePersistentDomain(forName: suite) }
         let draft = MediaDraft(kind: .video, defaults: defaults)
         precondition(draft.steps == 8)
-        draft.prompt = "복원할 장면"; draft.seed = 42
+        draft.prompt = "복원할 장면"; draft.seed = 42; draft.language = "English"
         let restored = MediaDraft(kind: .video, defaults: defaults)
-        precondition(restored.prompt == "복원할 장면" && restored.seed == 42 && restored.steps == 8)
+        precondition(restored.prompt == "복원할 장면" && restored.seed == 42 && restored.steps == 8 && restored.language == "English")
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: root) }

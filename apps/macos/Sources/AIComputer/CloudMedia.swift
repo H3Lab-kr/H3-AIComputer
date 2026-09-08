@@ -25,9 +25,9 @@ enum CloudFailure: LocalizedError {
     case endpoint, keychain, response, remote(String)
     var errorDescription: String? {
         switch self {
-        case .endpoint: return "인증 정보·쿼리가 없는 HTTPS API 기본 주소를 입력하세요."
-        case .keychain: return "Keychain에서 API 키를 읽거나 저장하지 못했습니다. 키를 다시 저장하세요."
-        case .response: return "API 응답이 지원 형식과 다릅니다. 제공자의 모델·출력 형식을 확인하세요."
+        case .endpoint: return L("인증 정보·쿼리가 없는 HTTPS API 기본 주소를 입력하세요.")
+        case .keychain: return L("Keychain에서 API 키를 읽거나 저장하지 못했습니다. 키를 다시 저장하세요.")
+        case .response: return L("API 응답이 지원 형식과 다릅니다. 제공자의 모델·출력 형식을 확인하세요.")
         case .remote(let value): return value
         }
     }
@@ -55,7 +55,7 @@ struct CloudMediaClient {
         func fetch(_ request: URLRequest) async throws -> Data {
             let (data, response) = try await session.data(for: request)
             guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
-                throw CloudFailure.remote("API 오류 HTTP \((response as? HTTPURLResponse)?.statusCode ?? 0). 인증·잔액·모델 지원을 확인하세요.")
+                throw CloudFailure.remote(L("API 오류 HTTP {0}. 인증·잔액·모델 지원을 확인하세요.", String(describing: (response as? HTTPURLResponse)?.statusCode ?? 0)))
             }
             return data
         }
@@ -86,9 +86,9 @@ struct CloudMediaClient {
             let deadline = Date().addingTimeInterval(900)
             while json["status"] as? String != "completed" {
                 try Task.checkCancellation()
-                if json["status"] as? String == "failed" { throw CloudFailure.remote("서비스의 영상 생성 작업이 실패했습니다.") }
-                guard Date() < deadline else { throw CloudFailure.remote("영상 작업 대기 시간이 초과되었습니다. 원격 작업 ID를 확인하세요.") }
-                await status("영상 생성: \(json["status"] as? String ?? "대기") · \(json["progress"] as? Int ?? 0)%")
+                if json["status"] as? String == "failed" { throw CloudFailure.remote(L("서비스의 영상 생성 작업이 실패했습니다.")) }
+                guard Date() < deadline else { throw CloudFailure.remote(L("영상 작업 대기 시간이 초과되었습니다. 원격 작업 ID를 확인하세요.")) }
+                await status(L("영상 생성: {0} · {1}%", String(describing: json["status"] as? String ?? L("대기")), String(describing: json["progress"] as? Int ?? 0)))
                 try await Task.sleep(nanoseconds: 3_000_000_000)
                 json = try JSONSerialization.jsonObject(with: await fetch(request("videos/\(id)"))) as? [String: Any] ?? [:]
             }
@@ -108,7 +108,7 @@ struct CloudMediaClient {
     private var job: Task<Void, Never>?
     func run(kind: MediaKind, endpoint: String, model: String, prompt: String, size: String, voice: String, seconds: String) {
         guard !busy else { return }
-        busy = true; status = "온라인 API 요청 중"; output = nil; player = nil
+        busy = true; status = L("온라인 API 요청 중"); output = nil; player = nil
         job = Task {
             defer { busy = false }
             let start = Date()
@@ -121,10 +121,10 @@ struct CloudMediaClient {
                 try r.save(in: dir); record = r
                 let result = try await CloudMediaClient(base: base, key: key).generate(kind: kind, model: model, prompt: prompt, size: size, voice: voice, seconds: seconds, directory: dir) { [weak self] in self?.status = $0 }
                 r.status = "generated_unreviewed"; r.artifacts = [result.lastPathComponent]; r.elapsedSeconds = Date().timeIntervalSince(start); try r.save(in: dir)
-                output = result; status = "생성 완료 · 검토 전 · \(Int(r.elapsedSeconds!))초"
+                output = result; status = L("생성 완료 · 검토 전 · {0}초", String(describing: Int(r.elapsedSeconds!)))
                 if kind != .image { player = AVPlayer(url: result) }
             } catch {
-                status = Task.isCancelled ? "대기를 중단했습니다. 원격 서비스의 생성·과금이 중단된 것은 아닙니다. 작업 ID를 확인하세요." : error.localizedDescription
+                status = Task.isCancelled ? L("대기를 중단했습니다. 원격 서비스의 생성·과금이 중단된 것은 아닙니다. 작업 ID를 확인하세요.") : error.localizedDescription
                 if var r = record, let directory { r.status = Task.isCancelled ? "cancelled" : "failed"; r.elapsedSeconds = Date().timeIntervalSince(start); try? r.save(in: directory) }
             }
         }
@@ -132,6 +132,7 @@ struct CloudMediaClient {
     func stop() { job?.cancel() }
 }
 struct CloudMediaView: View {
+    @Environment(\.locale) private var locale
     @ObservedObject var vm: CloudMediaWorkspace
     @ObservedObject var form: MediaDraft
     let kind: MediaKind
@@ -149,41 +150,41 @@ struct CloudMediaView: View {
     }
     var body: some View {
         ScrollView { VStack(alignment: .leading, spacing: 16) {
-            Text("\(kind.title) · 선택형 API").font(.largeTitle.bold())
-            Text("요청을 선택한 서비스에 전송합니다. 사용료는 해당 서비스 계정에 적용됩니다. 로컬 모드로 자동 전환하거나 로컬 입력을 자동 업로드하지 않습니다.").font(.callout).foregroundStyle(.secondary)
-            GroupBox("OpenRouter · OpenAI 호환 API 연결") {
+            Text(L("{0} · 선택형 API", String(describing: kind.title))).font(.largeTitle.bold())
+            Text(L("요청을 선택한 서비스에 전송합니다. 사용료는 해당 서비스 계정에 적용됩니다. 로컬 모드로 자동 전환하거나 로컬 입력을 자동 업로드하지 않습니다.")).font(.callout).foregroundStyle(.secondary)
+            GroupBox(L("OpenRouter · OpenAI 호환 API 연결")) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack { Button("OpenRouter") { endpoint = "https://openrouter.ai/api/v1" }; Button("OpenAI") { endpoint = "https://api.openai.com/v1" } }
-                    TextField("HTTPS API 기본 주소", text: $endpoint).textFieldStyle(.roundedBorder)
-                    TextField("제공자가 지원하는 모델 ID", text: $model).textFieldStyle(.roundedBorder)
-                    HStack { SecureField("API 키 (Keychain 저장)", text: $key).textFieldStyle(.roundedBorder); Button("키 저장") {
-                        do { let url = try CloudMediaClient.validate(endpoint); guard !key.isEmpty else { return }; try APIKeyStore.save(key, account: url.absoluteString); key = ""; message = "이 API 주소의 키를 Keychain에 저장했습니다." } catch { message = error.localizedDescription }
-                    }; Button("저장 키 삭제") { APIKeyStore.remove(endpoint); message = "저장 키 삭제 요청 완료" } }
+                    TextField(L("HTTPS API 기본 주소"), text: $endpoint).textFieldStyle(.roundedBorder)
+                    TextField(L("제공자가 지원하는 모델 ID"), text: $model).textFieldStyle(.roundedBorder)
+                    HStack { SecureField(L("API 키 (Keychain 저장)"), text: $key).textFieldStyle(.roundedBorder); Button(L("키 저장")) {
+                        do { let url = try CloudMediaClient.validate(endpoint); guard !key.isEmpty else { return }; try APIKeyStore.save(key, account: url.absoluteString); key = ""; message = L("이 API 주소의 키를 Keychain에 저장했습니다.") } catch { message = error.localizedDescription }
+                    }; Button(L("저장 키 삭제")) { APIKeyStore.remove(endpoint); message = L("저장 키 삭제 요청 완료") } }
                     Text(message).font(.caption)
-                    Text(kind == .speech ? "규격: /audio/speech · WAV" : kind == .image ? "규격: /images/generations · base64 이미지 응답" : "규격: /videos · 생성 요청 / 상태 조회 / MP4 다운로드").font(.caption).foregroundStyle(.secondary)
+                    Text(kind == .speech ? L("규격: /audio/speech · WAV") : kind == .image ? L("규격: /images/generations · base64 이미지 응답") : L("규격: /videos · 생성 요청 / 상태 조회 / MP4 다운로드")).font(.caption).foregroundStyle(.secondary)
                 }.padding(10)
             }.disabled(vm.busy)
             TextEditor(text: $form.prompt).frame(minHeight: 110).disabled(vm.busy)
             HStack {
-                if kind == .speech { TextField("목소리 ID", text: $voice).textFieldStyle(.roundedBorder) }
-                else { TextField("크기 (예: 1024x1024 / 영상 720x1280)", text: $size).textFieldStyle(.roundedBorder) }
-                if kind == .video { Picker("초", selection: $seconds) { Text("4초").tag("4"); Text("8초").tag("8"); Text("12초").tag("12") } }
+                if kind == .speech { TextField(L("목소리 ID"), text: $voice).textFieldStyle(.roundedBorder) }
+                else { TextField(L("크기 (예: 1024x1024 / 영상 720x1280)"), text: $size).textFieldStyle(.roundedBorder) }
+                if kind == .video { Picker(L("초"), selection: $seconds) { Text(L("4초")).tag("4"); Text(L("8초")).tag("8"); Text(L("12초")).tag("12") } }
             }.disabled(vm.busy)
-            HStack { Button("온라인 API로 생성") { confirm = true }.buttonStyle(.borderedProminent).disabled(vm.busy || model.isEmpty || form.prompt.isEmpty); if vm.busy { ProgressView(); Button("대기 중단") { vm.stop() } } }
+            HStack { Button(L("온라인 API로 생성")) { confirm = true }.buttonStyle(.borderedProminent).disabled(vm.busy || model.isEmpty || form.prompt.isEmpty); if vm.busy { ProgressView(); Button(L("대기 중단")) { vm.stop() } } }
             Text(vm.status).textSelection(.enabled)
             if let url = vm.output {
                 if url.pathExtension == "png", let image = NSImage(contentsOf: url) { Image(nsImage: image).resizable().scaledToFit().frame(maxHeight: 320) }
-                else if let player = vm.player { VideoPlayer(player: player).frame(height: 240) }
-                Button("원본 보기") { NSWorkspace.shared.open(url) }
+                else if let player = vm.player { MediaPlayer(player: player).frame(height: 240) }
+                Button(L("원본 보기")) { NSWorkspace.shared.open(url) }
             }
-            if let directory = vm.directory { Button("기록 폴더 열기") { NSWorkspace.shared.open(directory) } }
+            if let directory = vm.directory { Button(L("기록 폴더 열기")) { NSWorkspace.shared.open(directory) } }
         } }.onAppear {
             let saved = UserDefaults.standard.dictionary(forKey: preferenceKey) as? [String: String] ?? [:]
             endpoint = saved["endpoint"] ?? "https://api.openai.com/v1"; model = saved["model"] ?? ""
             voice = saved["voice"] ?? "alloy"; size = saved["size"] ?? (kind == .video ? "720x1280" : "1024x1024"); seconds = saved["seconds"] ?? "4"
-        }.onDisappear { saveConnection() }.confirmationDialog("\(endpoint)에 프롬프트를 보내 \(model)로 생성할까요? 서비스 사용료가 발생할 수 있습니다.", isPresented: $confirm) {
-            Button("전송하고 생성") { saveConnection(); vm.run(kind: kind, endpoint: endpoint, model: model, prompt: form.prompt, size: size, voice: voice, seconds: seconds) }
-            Button("취소", role: .cancel) { }
+        }.onDisappear { saveConnection() }.confirmationDialog(L("{0}에 프롬프트를 보내 {1}로 생성할까요? 서비스 사용료가 발생할 수 있습니다.", String(describing: endpoint), String(describing: model)), isPresented: $confirm) {
+            Button(L("전송하고 생성")) { saveConnection(); vm.run(kind: kind, endpoint: endpoint, model: model, prompt: form.prompt, size: size, voice: voice, seconds: seconds) }
+            Button(L("취소"), role: .cancel) { }
         }
     }
 }

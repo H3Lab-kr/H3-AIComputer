@@ -58,6 +58,16 @@ function Tower({ variant = 'studio' }: { variant?: string }) {
   )
 }
 
+/* lucide 1.x 는 브랜드 아이콘을 더 이상 제공하지 않는다.
+   GitHub 로 연결하는 링크이므로 이용자가 바로 알아보는 마크를 직접 그린다. */
+function GithubMark({ size = 17 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+    </svg>
+  )
+}
+
 function StaticHardware() {
   return (
     <div className="static-hardware">
@@ -363,6 +373,16 @@ export default function App() {
             EN
           </button>
         </div>
+        <a
+          className="header-github"
+          href="https://github.com/H3Lab-kr/H3-AIComputer"
+          target="_blank"
+          rel="noreferrer"
+          aria-label={t('GitHub 저장소 열기 (새 창)')}
+          title="GitHub"
+        >
+          <GithubMark />
+        </a>
         <button className="header-contact" onClick={() => setContact('studio')}>
           {t('나의 H3 구성하기')}
           <ArrowUpRight size={16} />
@@ -691,7 +711,7 @@ export default function App() {
               />
               <div className="mac-panel">
                 <div>
-                  <p className="eyebrow">H3 FOR MAC / PREVIEW 0.4</p>
+                  <p className="eyebrow">H3 FOR MAC / PREVIEW 0.4.1</p>
                   <h3>
                     {t('이미 가진 Mac에도,')}
                     <br />
@@ -699,11 +719,11 @@ export default function App() {
                   </h3>
                   <p>
                     {t(
-                      'H3 Preview 0.4는 스트리밍 대화, 대화·초안 자동 저장, 로컬 서버 찾기와 생성 작업 재시도를 제공합니다. 내 Mac의 대화·음성·이미지·영상을 하나의 작업 공간에서 이어가세요.',
+                      'H3 Preview 0.4.1은 한국어·영어 전환과 안정적인 음성 미리보기를 제공합니다. 스트리밍 대화, 모델 연결, 음성·이미지·영상 작업을 내 Mac에서 이어가세요.',
                     )}
                   </p>
-                  <a className="button primary" href="/downloads/H3-Mac-0.4.0-preview.zip" download>
-                    {t('Mac Preview 0.4 다운로드')} <ArrowUpRight size={16} />
+                  <a className="button primary" href="/downloads/H3-Mac-0.4.1-preview.zip" download>
+                    {t('Mac Preview 0.4.1 다운로드')} <ArrowUpRight size={16} />
                   </a>
                   <p className="mac-preview-note">
                     {t('Apple Silicon · macOS 14+ · 모델 별도 준비 · 개발자 Preview (공증 전)')}
@@ -725,7 +745,7 @@ export default function App() {
                 <div className="mac-visual">
                   <img
                     className="mac-app-screenshot"
-                    src="/brand/h3-mac-preview-04.png"
+                    src={language === 'en' ? '/brand/h3-mac-041-en.png' : '/brand/h3-mac-041-ko.png'}
                     alt={t('H3 Mac 앱 실제 화면 · 시작 준비와 생성 워크스페이스')}
                     loading="lazy"
                     width="1860"

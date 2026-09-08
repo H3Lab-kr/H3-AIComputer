@@ -31,15 +31,17 @@ Full HD · AI-generated narration · Original music · Localized captions
 | **Video** | Generate video with audio through MiniMax H3, supply a starting image and use the default eight-step workflow |
 | **Library** | Keep inputs, settings, original outputs and logs together; revisit recent work |
 
-**The Mac app is currently developer Preview 0.4.** Its native SwiftUI interface brings chat, voice, image and video tools together with model connections and job records.
+**The Mac app is currently developer Preview 0.4.1.** Its native SwiftUI interface brings chat, voice, image and video tools together with model connections and job records.
 
-### New in Mac Preview 0.4
+### New in Mac Preview 0.4.1
 
 Streaming answers, saved conversations and creation drafts, local server discovery, a setup checklist and repeatable generation jobs. The blue/navy interface and gold H3 icon connect the app to the product identity.
 
-![H3 Mac Preview 0.4](apps/web/public/brand/h3-mac-preview-04.png)
+Switch **한국어 / English** from the app header without restarting. Preview 0.4.1 fixes a crash when opening generated speech for playback.
 
-[Download the Mac Preview](apps/web/public/downloads/H3-Mac-0.4.0-preview.zip) · [Setup and release notes](docs/public/MAC-APP.md) · [Product roadmap](docs/public/MAC-PRODUCT-PLAN.md)
+![H3 Mac Preview 0.4.1](apps/web/public/brand/h3-mac-041-en.png)
+
+[Download the Mac Preview](apps/web/public/downloads/H3-Mac-0.4.1-preview.zip) · [Setup and release notes](docs/public/MAC-APP.md) · [Product roadmap](docs/public/MAC-PRODUCT-PLAN.md)
 
 ## AI computers designed around the work
 
@@ -92,7 +94,6 @@ The interactive simulation explores **understand → plan → approve → act �
 
 [Windows · Linux · macOS downloads](https://github.com/H3Lab-kr/H3-AIComputer/releases/tag/v0.4.0-preview.1) · [Desktop setup](apps/desktop/README.md)
 
-![H3 Desktop](apps/web/public/brand/h3-desktop-preview-04.png)
 
 ## Start on Mac
 

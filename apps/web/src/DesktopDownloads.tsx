@@ -40,7 +40,7 @@ export default function DesktopDownloads() {
             <a className="button primary" href={release + 'H3-macOS-arm64.tar.gz'}>
               macOS Apple Silicon
             </a>
-            <a className="button secondary" href="/downloads/H3-Mac-0.4.0-preview.zip">
+            <a className="button secondary" href="/downloads/H3-Mac-0.4.1-preview.zip">
               {t('Mac 네이티브 앱 · SwiftUI')}
             </a>
           </div>

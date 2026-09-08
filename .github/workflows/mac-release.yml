@@ -1,0 +1,35 @@
+name: Native Mac release
+on:
+  push:
+    tags: ['mac-v*-preview*']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 apps/macos/Tests/run_fixture.py
+      - run: bash scripts/test-mac-app.sh
+      - run: bash scripts/test-mac-localization.sh
+      - run: bash scripts/build-mac-app.sh
+      - name: Verify downloadable app archive
+        working-directory: apps/web/public/downloads
+        run: |
+          shasum -a 256 -c H3-Mac-0.4.1-preview.zip.sha256
+          unzip -t H3-Mac-0.4.1-preview.zip
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          name: H3 Mac 0.4.1 · Speech preview fix & Korean / English
+          body_path: docs/public/MAC-041-RELEASE.md
+          files: |
+            apps/web/public/downloads/H3-Mac-0.4.1-preview.zip
+            apps/web/public/downloads/H3-Mac-0.4.1-preview.zip.sha256

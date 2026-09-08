@@ -21,10 +21,10 @@ enum ClientError: LocalizedError {
     case invalidEndpoint, http(Int), emptyReply, incompleteStream
     var errorDescription: String? {
         switch self {
-        case .invalidEndpoint: return "로컬 주소만 사용할 수 있습니다. 예: http://127.0.0.1:1234/v1"
-        case .http(let code): return "로컬 서버 응답 오류 (HTTP \(code)). 서버의 모델·인증 설정을 확인하세요."
-        case .incompleteStream: return "응답 연결이 완료 전에 끊겼습니다. 부분 응답을 확인하고 다시 요청하세요."
-        case .emptyReply: return "모델이 응답 내용을 반환하지 않았습니다."
+        case .invalidEndpoint: return L("로컬 주소만 사용할 수 있습니다. 예: http://127.0.0.1:1234/v1")
+        case .http(let code): return L("로컬 서버 응답 오류 (HTTP {0}). 서버의 모델·인증 설정을 확인하세요.", String(describing: code))
+        case .incompleteStream: return L("응답 연결이 완료 전에 끊겼습니다. 부분 응답을 확인하고 다시 요청하세요.")
+        case .emptyReply: return L("모델이 응답 내용을 반환하지 않았습니다.")
         }
     }
 }

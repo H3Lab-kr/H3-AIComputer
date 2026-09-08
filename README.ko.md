@@ -21,13 +21,15 @@ H3Lab은 공개 모델과 글로벌 기술팀의 실행 기술을 바탕으로, 
 
 Full HD · AI 합성 나레이션 · 오리지널 음악 · 언어별 자막
 
-### Mac Preview 0.4의 새로운 경험
+### Mac Preview 0.4.1의 새로운 경험
 
 스트리밍 응답, 대화·생성 초안 자동 저장, 로컬 서버 찾기, 첫 실행 안내와 같은 설정으로 새 작업 만들기를 제공합니다. 네이비·블루 화면과 골드 H3 아이콘으로 브랜드 경험을 연결합니다.
 
-![H3 Mac Preview 0.4 실제 화면](apps/web/public/brand/h3-mac-preview-04.png)
+앱 상단에서 **한국어 / English**를 재시작 없이 전환합니다. Preview 0.4.1은 음성 생성 후 미리보기에서 앱이 종료되는 문제를 수정했습니다.
 
-[Mac Preview 다운로드](apps/web/public/downloads/H3-Mac-0.4.0-preview.zip) · [설치 및 변경 안내](docs/public/MAC-APP.md) · [제품화 로드맵](docs/public/MAC-PRODUCT-PLAN.md)
+![H3 Mac Preview 0.4.1 실제 화면](apps/web/public/brand/h3-mac-041-ko.png)
+
+[Mac Preview 다운로드](apps/web/public/downloads/H3-Mac-0.4.1-preview.zip) · [설치 및 변경 안내](docs/public/MAC-APP.md) · [제품화 로드맵](docs/public/MAC-PRODUCT-PLAN.md)
 
 ## 하나의 컴퓨터, 다양한 가능성
 
@@ -39,7 +41,7 @@ Full HD · AI 합성 나레이션 · 오리지널 음악 · 언어별 자막
 | **영상** | MiniMax H3 기반 영상·오디오 생성, 시작 이미지 입력, 8스텝 기본 제작 흐름 |
 | **작업 보관함** | 입력·설정·원본·로그를 한 작업으로 보관하고 최신순으로 다시 확인 |
 
-**현재 Mac 앱은 개발자 Preview 0.4입니다.** SwiftUI 기반 네이티브 화면에서 대화·음성·이미지·영상 도구를 다루고, 모델 연결과 작업 기록을 함께 관리합니다.
+**현재 Mac 앱은 개발자 Preview 0.4.1입니다.** SwiftUI 기반 네이티브 화면에서 대화·음성·이미지·영상 도구를 다루고, 모델 연결과 작업 기록을 함께 관리합니다.
 
 ## 목적에 맞는 AI 컴퓨터
 

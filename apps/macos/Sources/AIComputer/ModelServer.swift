@@ -30,7 +30,7 @@ import Foundation
                     if !ready, let models = try? await LocalClient(endpoint).models(timeout: 1), !models.isEmpty { ready = true }
                     try await Task.sleep(nanoseconds: 500_000_000)
                 }
-                if p.terminationStatus != 0 && p.terminationReason == .exit { error = "서버가 종료되었습니다 (\(p.terminationStatus)). 로그를 확인하세요." }
+                if p.terminationStatus != 0 && p.terminationReason == .exit { error = L("서버가 종료되었습니다 ({0}). 로그를 확인하세요.", String(describing: p.terminationStatus)) }
             } catch { self.error = error.localizedDescription }
         }
     }

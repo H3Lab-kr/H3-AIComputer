@@ -1,15 +1,15 @@
-# H3 for Mac — Developer Preview 0.4
+# H3 for Mac — Developer Preview 0.4.1
 
 Native SwiftUI workspace for chat, Korean speech, image and video generation. Apple Silicon, macOS 14+. Build tested on the development Mac; this is not a certification of every Mac configuration.
 
-## Preview 0.4
+## Preview 0.4.1
 
 - Streaming answers with observed time to first content (includes server wait).
 - Saved conversation and creation drafts; local server discovery on three known ports.
 - First-run checklist, automatic readiness checks for an app-owned server, live generation elapsed time, retry from recorded inputs, interrupted-job recovery.
 - Blue/navy workspace, gold H3 identity and a native app icon.
 
-[Download the Apple Silicon Preview ZIP](../../apps/web/public/downloads/H3-Mac-0.4.0-preview.zip). Unzip and move H3.app to Applications. This build has local ad-hoc signing; **Developer ID signing/notarization is not yet available**, so macOS may block first launch. The source build below remains available. Do not disable Gatekeeper globally. The archive contains the app only; models and runtimes are installed separately.
+[Download the Apple Silicon Preview ZIP](../../apps/web/public/downloads/H3-Mac-0.4.1-preview.zip). Unzip and move H3.app to Applications. This build has local ad-hoc signing; **Developer ID signing/notarization is not yet available**, so macOS may block first launch. The source build below remains available. Do not disable Gatekeeper globally. The archive contains the app only; models and runtimes are installed separately.
 
 ## Build and first use
 
@@ -64,3 +64,20 @@ Next milestones: guided installs/repair, model download UI, persistent media wor
 ## Release verification — 2026-09-09
 
 Release build and offline client/media tests passed, including fragmented Korean SSE, truncated/malformed streams, conversation round-trip/clear, draft restoration, interrupted-job recovery, process failures and cancellation. A real local Qwen3.8-27B MLX 8bit stream returned a Korean answer: first content 0.663s, complete answer 2.326s. This is one request after server startup, not a throughput comparison or app-wide acceleration claim. Home screen was visually inspected. Full customer acceptance and public signing remain release gates.
+
+
+## Preview 0.4.1 · Speech playback and languages
+
+Choose **한국어 / English** in the header. The preference persists between launches; navigation, generation, model management, agent approvals and H3 error messages are translated. User documents, prompts, model IDs, runtime logs and existing job records remain unchanged. Speech language has its own Korean/English selector, independent of interface language.
+
+Two local macOS 26.6.2 crash reports terminated with SIGABRT in `_AVKit_SwiftUI` generic superclass metadata initialization. Both associated speech jobs already had a successful record and WAV output. The native app now wraps AppKit `AVPlayerView` directly instead of SwiftUI `VideoPlayer`, for both local and cloud media previews.
+
+Verification: local Qwen3-TTS generation through `MediaWorkspace`, mounting the real `MediaView`, preview readiness and advancing playback passed. Automated native tests exercise player mount, play, replacement and teardown; language templates preserve argument placeholders; the actual ContentView switches English → Korean → English without replacing its workspace.
+
+```sh
+bash scripts/test-mac-app.sh
+bash scripts/test-mac-localization.sh output/mac-localization
+python3 apps/macos/Tests/run_fixture.py
+```
+
+The localization test captures actual rendered native views when given an output directory. README.md uses the English capture; README.ko.md uses Korean. These fixes apply to the native SwiftUI Mac app; the shared Electron Desktop Preview remains a separate download.

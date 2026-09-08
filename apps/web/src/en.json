@@ -288,5 +288,8 @@
   "로컬 에이전트, 모델 다운로드·업데이트, 음성·이미지·영상 도구와 선택형 API를 하나의 작업 공간으로 연결합니다.": "Connect a local agent, model downloads and updates, voice, image and video tools, and optional APIs in one workspace.",
   "Mac 네이티브 앱 · SwiftUI": "Native Mac app · SwiftUI",
   "모델·실행 도구 별도 설치 · 공개 서명·공증 전 Preview · OS별 호환 실행 환경 필요": "Models and runtimes installed separately · Preview without public signing/notarization · Compatible runtimes required per OS",
-  "설치 및 지원 범위 확인": "Installation and supported capabilities"
+  "설치 및 지원 범위 확인": "Installation and supported capabilities",
+  "GitHub 저장소 열기 (새 창)": "Open the GitHub repository (new window)",
+  "Mac Preview 0.4.1 다운로드": "Download Mac Preview 0.4.1",
+  "H3 Preview 0.4.1은 한국어·영어 전환과 안정적인 음성 미리보기를 제공합니다. 스트리밍 대화, 모델 연결, 음성·이미지·영상 작업을 내 Mac에서 이어가세요.": "H3 Preview 0.4.1 adds Korean/English switching and fixes speech preview playback. Connect models, stream conversations and create speech, images and video on your Mac."
 }

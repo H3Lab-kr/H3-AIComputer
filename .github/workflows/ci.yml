@@ -9,6 +9,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: python3 apps/macos/Tests/run_fixture.py
       - run: bash scripts/test-mac-app.sh
+      - run: bash scripts/test-mac-localization.sh
       - run: bash scripts/build-mac-app.sh
   web:
     runs-on: ubuntu-latest

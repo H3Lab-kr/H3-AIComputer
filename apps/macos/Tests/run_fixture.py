@@ -43,10 +43,10 @@ try:
     root=Path(__file__).resolve().parents[1]
     with tempfile.TemporaryDirectory() as tmp:
         binary=str(Path(tmp)/'client-tests')
-        subprocess.run(['swiftc','-parse-as-library',str(root/'Sources/AIComputer/Client.swift'),str(root/'Tests/AIComputerTests/ClientTests.swift'),'-o',binary],check=True)
+        subprocess.run(['swiftc','-parse-as-library',str(root/'Sources/AIComputer/Localization.swift'),str(root/'Sources/AIComputer/Client.swift'),str(root/'Tests/AIComputerTests/ClientTests.swift'),'-o',binary],check=True)
         result=subprocess.run([binary],env=env,check=True)
         agent_binary=str(Path(tmp)/'agent-tests')
-        sources=['Client.swift','MediaJob.swift','MediaView.swift','Agent.swift','ModelLibrary.swift','CloudMedia.swift']
+        sources=['Localization.swift','MediaPlayer.swift','Client.swift','MediaJob.swift','MediaView.swift','Agent.swift','ModelLibrary.swift','CloudMedia.swift']
         subprocess.run(['swiftc','-parse-as-library',*[str(root/'Sources/AIComputer'/name) for name in sources],str(root/'Tests/AIComputerTests/AgentTests.swift'),'-o',agent_binary],check=True)
         result=subprocess.run([agent_binary],env=env)
 finally:server.shutdown();server.server_close()

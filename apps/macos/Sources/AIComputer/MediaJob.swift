@@ -3,11 +3,11 @@ import Foundation
 enum MediaKind: String, CaseIterable, Codable, Identifiable {
     case speech, image, video
     var id: String { rawValue }
-    var title: String { switch self { case .speech: return "음성 만들기"; case .image: return "이미지 만들기"; case .video: return "영상 만들기" } }
+    var title: String { switch self { case .speech: return L("음성 만들기"); case .image: return L("이미지 만들기"); case .video: return L("영상 만들기") } }
     var recommendation: String { switch self {
     case .speech: return "Qwen3-TTS 1.7B CustomVoice · MLX 8bit / mlx_audio.tts.generate"
     case .image: return "FLUX.2 klein 4B · MFLUX / mflux-generate-flux2"
-    case .video: return "MiniMax H3 Turbo8 FL2VA · 8스텝 / h3.c"
+    case .video: return L("MiniMax H3 Turbo8 FL2VA · 8스텝 / h3.c")
     } }
     var extensions: Set<String> { switch self { case .speech: return ["wav"]; case .image: return ["png"]; case .video: return ["mp4"] } }
 }
@@ -26,13 +26,13 @@ struct MediaInput: Codable {
     var language = "Korean"
     func validate() throws {
         func fail(_ message: String) throws { throw NSError(domain: "AIComputer", code: 1, userInfo: [NSLocalizedDescriptionKey: message]) }
-        guard executable.hasPrefix("/"), FileManager.default.isExecutableFile(atPath: executable) else { try fail("실행 가능한 로컬 CLI 파일을 선택하세요."); return }
+        guard executable.hasPrefix("/"), FileManager.default.isExecutableFile(atPath: executable) else { try fail(L("실행 가능한 로컬 CLI 파일을 선택하세요.")); return }
         var directory: ObjCBool = false
-        guard model.hasPrefix("/"), FileManager.default.fileExists(atPath: model, isDirectory: &directory), directory.boolValue else { try fail("이미 준비된 로컬 모델 폴더를 선택하세요. 모델 ID로 다운로드하지 않습니다."); return }
-        guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { try fail("생성할 내용을 입력하세요."); return }
-        guard steps > 0, steps <= 100, width >= 64, height >= 64, width <= 2048, height <= 2048, width % 32 == 0, height % 32 == 0, frames > 0, frames <= 401, seed >= 0 else { try fail("크기는 64~2048의 32 배수, 스텝은 1~100, 프레임은 1~401, 시드는 0 이상이어야 합니다."); return }
+        guard model.hasPrefix("/"), FileManager.default.fileExists(atPath: model, isDirectory: &directory), directory.boolValue else { try fail(L("이미 준비된 로컬 모델 폴더를 선택하세요. 모델 ID로 다운로드하지 않습니다.")); return }
+        guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { try fail(L("생성할 내용을 입력하세요.")); return }
+        guard steps > 0, steps <= 100, width >= 64, height >= 64, width <= 2048, height <= 2048, width % 32 == 0, height % 32 == 0, frames > 0, frames <= 401, seed >= 0 else { try fail(L("크기는 64~2048의 32 배수, 스텝은 1~100, 프레임은 1~401, 시드는 0 이상이어야 합니다.")); return }
         if !reference.isEmpty {
-            guard kind == .video, reference.hasPrefix("/"), FileManager.default.isReadableFile(atPath: reference) else { try fail("읽을 수 있는 시작 이미지 파일을 선택하세요."); return }
+            guard kind == .video, reference.hasPrefix("/"), FileManager.default.isReadableFile(atPath: reference) else { try fail(L("읽을 수 있는 시작 이미지 파일을 선택하세요.")); return }
         }
     }
     func arguments(output: URL) -> [String] {
@@ -58,7 +58,7 @@ struct MediaRecord: Codable, Identifiable {
     var exitCode: Int32?
     var artifacts: [String] = []
     var qualityApproved = false
-    var note = "실행 기록이며 모델 호환성·품질·성능 검증을 의미하지 않습니다."
+    var note = L("실행 기록이며 모델 호환성·품질·성능 검증을 의미하지 않습니다.")
     func save(in directory: URL) throws {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]; encoder.dateEncodingStrategy = .iso8601
         try encoder.encode(self).write(to: directory.appendingPathComponent("request.json"), options: .atomic)
@@ -90,7 +90,7 @@ enum MediaFiles {
             let file = directory.appendingPathComponent("request.json")
             guard let data = try? Data(contentsOf: file), var record = try? decoder.decode(MediaRecord.self, from: data), record.status == "running" else { continue }
             record.status = "interrupted"
-            record.note = "앱 재시작 시 완료 기록이 없는 작업입니다. 결과와 로그를 확인한 뒤 새 작업으로 다시 시도하세요."
+            record.note = L("앱 재시작 시 완료 기록이 없는 작업입니다. 결과와 로그를 확인한 뒤 새 작업으로 다시 시도하세요.")
             try record.save(in: directory)
         }
     }
@@ -114,12 +114,12 @@ enum MediaFiles {
 extension MediaRecord {
     var displayStatus: String {
         switch status {
-        case "prepared": return "설정 확인 대기"
-        case "running": return "실행 중 / 기록 확인"
-        case "generated_unreviewed": return "생성 완료 · 검토 전"
-        case "interrupted": return "중단된 작업 · 확인 후 재시도"
-        case "cancelled": return "중단됨"
-        case "failed": return "실행 실패"
+        case "prepared": return L("설정 확인 대기")
+        case "running": return L("실행 중 / 기록 확인")
+        case "generated_unreviewed": return L("생성 완료 · 검토 전")
+        case "interrupted": return L("중단된 작업 · 확인 후 재시도")
+        case "cancelled": return L("중단됨")
+        case "failed": return L("실행 실패")
         default: return status
         }
     }
