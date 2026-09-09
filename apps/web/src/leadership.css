@@ -1,0 +1,249 @@
+.leadership-header .leadership-home {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.leadership-intro {
+  background: #101f34;
+  color: #f4f6fa;
+  padding: 84px 32px 52px;
+  position: relative;
+  overflow: hidden;
+}
+.leadership-intro::after {
+  content: '';
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border: 1px solid #ffffff12;
+  border-radius: 50%;
+  right: -80px;
+  top: -180px;
+  box-shadow:
+    0 0 0 70px #ffffff03,
+    0 0 0 140px #ffffff03;
+  pointer-events: none;
+}
+.leadership-intro-inner,
+.leadership-team {
+  max-width: 1200px;
+  margin: auto;
+  position: relative;
+  z-index: 1;
+}
+.leadership-eyebrow {
+  color: #c9b17a;
+  letter-spacing: 3px;
+  font-size: 11px;
+  margin: 0 0 32px;
+}
+.leadership-intro h1 {
+  font-size: clamp(36px, 4.5vw, 64px);
+  line-height: 1.3;
+  letter-spacing: -2px;
+  font-weight: 500;
+  margin: 0;
+}
+.leadership-intro-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  border-top: 1px solid #ffffff26;
+  margin-top: 44px;
+  padding-top: 26px;
+}
+.leadership-intro-bottom p {
+  white-space: pre-line;
+  max-width: 610px;
+  color: #bbc9dc;
+  font-size: 14px;
+  line-height: 1.9;
+  margin: 0;
+}
+.leadership-intro-bottom > span {
+  color: #dbc797;
+  font-size: 32px;
+  white-space: nowrap;
+}
+.leadership-intro-bottom > span span {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+.leadership-team {
+  padding: 68px 0 80px;
+}
+.leadership-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.leadership-section-heading h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+}
+.leadership-section-heading > span {
+  color: #54637a;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+.leadership-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px;
+}
+.leader-portrait {
+  position: relative;
+  background: #e3e6eb;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.leader-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.leader-portrait > span {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  padding: 7px 10px;
+  color: #f2dfb1;
+  background: #122036;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+.leader-identity {
+  padding: 26px 0 24px;
+  border-bottom: 1px solid #c9d0db;
+}
+.leader-identity p {
+  margin: 0 0 12px;
+  color: #385884;
+  font-size: 13px;
+  font-weight: 600;
+}
+.leader-identity h3 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+.leader-identity > span {
+  color: #5b6678;
+  font-size: 11px;
+}
+.leader-card h4 {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 24px 0 16px;
+}
+.leader-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.leader-card li {
+  position: relative;
+  padding-left: 12px;
+  margin: 0 0 13px;
+  color: #455367;
+  font-size: 12px;
+  line-height: 1.9;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.leader-card li::before {
+  content: '';
+  width: 3px;
+  height: 3px;
+  background: #7589a3;
+  position: absolute;
+  left: 0;
+  top: 10px;
+}
+.leadership-contact {
+  background: #e3e9f0;
+  text-align: center;
+  padding: 60px 24px;
+}
+.leadership-contact > p {
+  color: #485d7b;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+.leadership-contact h2 {
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 500;
+  margin: 24px 0;
+}
+.leadership-contact a {
+  display: inline-flex;
+  gap: 36px;
+  align-items: center;
+  background: #142238;
+  color: white;
+  padding: 16px 24px;
+  font-size: 13px;
+}
+.leadership-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 48px;
+  font-size: 11px;
+  color: #536176;
+}
+.leadership-footer a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+@media (max-width: 1280px) {
+  .leadership-team {
+    margin: 0 32px;
+  }
+}
+@media (max-width: 800px) {
+  .leadership-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .leader-card {
+    max-width: 520px;
+    width: 100%;
+    margin: auto;
+  }
+  .leadership-intro {
+    padding: 56px 24px 36px;
+  }
+  .leadership-team {
+    margin: 0 24px;
+    padding: 40px 0 48px;
+  }
+  .leadership-intro-bottom > span {
+    display: none;
+  }
+  .leadership-footer {
+    padding: 28px 24px;
+  }
+  .leadership-header {
+    gap: 16px;
+  }
+  .leadership-header .leadership-home {
+    font-size: 11px;
+  }
+}
+@media (max-width: 420px) {
+  .leadership-header .brand > span:last-child {
+    display: none;
+  }
+}

@@ -362,6 +362,7 @@ export default function App() {
           <a href="#approach" onClick={() => setMenu(false)}>
             {t('도입 과정')}
           </a>
+          <a href={`/leadership?lang=${language}`}>{t('임원 소개')}</a>
         </nav>
         <div className="language-switch" role="group" aria-label="Language / 언어">
           <button lang="ko" aria-pressed={language === 'ko'} onClick={() => setLanguage('ko')}>
@@ -952,6 +953,7 @@ export default function App() {
           <div>
             <a href="#systems">{t('컴퓨터')}</a>
             <a href="#workspace">{t('워크스페이스')}</a>
+            <a href={`/leadership?lang=${language}`}>{t('임원 소개')}</a>
             <a href="https://github.com/H3Lab-kr/H3-AIComputer" target="_blank" rel="noreferrer">
               GitHub <ArrowUpRight size={12} />
             </a>
