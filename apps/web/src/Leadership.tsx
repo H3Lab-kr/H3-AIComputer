@@ -6,7 +6,7 @@ import './leadership.css'
 const members = [
   {
     name: '정락현',
-    image: 'jung',
+    image: 'jung.jpg',
     role: ['대표', 'Chief Executive Officer'],
     bio: [
       ['세종대학교 산업대학원 교수', 'Professor, Graduate School of Industry, Sejong University'],
@@ -32,7 +32,7 @@ const members = [
   },
   {
     name: '이강훈',
-    image: 'lee',
+    image: 'lee.jpg',
     role: ['기술총괄', 'Head of Technology'],
     bio: [
       ['(사)한국인공지능연구소 소장', 'Director, Korea Artificial Intelligence Research Institute'],
@@ -41,7 +41,7 @@ const members = [
   },
   {
     name: '문아라',
-    image: 'moon',
+    image: 'moon.png',
     role: ['운영총괄', 'Head of Operations'],
     bio: [
       ['(주)한국인공지능아카데미 공동대표', 'Co-CEO, Korea Artificial Intelligence Academy'],
@@ -131,7 +131,7 @@ export default function Leadership() {
               >
                 <div className="leader-portrait">
                   <img
-                    src={`/members/${member.image}.jpg`}
+                    src={`/members/${member.image}`}
                     alt={`${member.name} ${member.role[en ? 1 : 0]}`}
                     width={900}
                     height={900}
